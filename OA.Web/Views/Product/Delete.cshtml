@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Delete";
+}
+
+
+<h2>Delete Product</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6 offset-3">
+            <form method="post" asp-asp-controller="Product" asp-action="Delete" enctype="multipart/form-data">
+
+                <partial name="_CreateOrUpdate"></partial>
+
+                <div class="form-group">
+                    <input type="submit" class="btn btn-danger" value="Delete" />
+                    <a class="btn btn-primary" asp-action="List" asp-controller="Product">Back to List</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+﻿@model IList<OA_WEB.Models.ProductModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<p>
+    <a class="btn btn-primary" asp-action="Create" asp-controller="Product">Create Product</a>
+</p>
+
+<div class="container mt-5">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-3 mb-4">
+                <div class="card h-100">
+                    <a asp-action="Details" asp-controller="Product" asp-route-id="@item.Id">
+                        <img src="@item.ImagePath" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
+                    </a>
+                    <div class="card-body text-center">
+                        <h5 class="card-text">Name : @item.Name</h5>
+                        <h5 class="card-text">Category : @item.CategoryName</h5>
+
+                        <a class="btn btn-warning" asp-action="Edit" asp-controller="Product" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn btn-info" asp-action="Details" asp-controller="Product" asp-route-id="@item.Id">Details</a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-controller="Product" asp-route-id="@item.Id">Delete</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

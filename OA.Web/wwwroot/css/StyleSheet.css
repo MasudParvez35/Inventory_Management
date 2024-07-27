@@ -1,0 +1,24 @@
+﻿.category-create, .category-delete, .category-edit {
+    width: 45%;
+}
+
+.category-list {
+    width: 50%;
+    text-align: center;
+}
+
+.Product-Details-Cart {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-around;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+.form-group {
+    margin-bottom: .5rem;
+}
+label {
+    margin-bottom: .3rem;
+}

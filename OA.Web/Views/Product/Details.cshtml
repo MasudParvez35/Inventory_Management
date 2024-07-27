@@ -1,0 +1,25 @@
+﻿@model OA_WEB.Models.ProductModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <img src="@Model.ImagePath" class="card-img-top" alt="@Model.Name" style="height: 300px; width:300px; margin:auto;">
+                <div class="card-body text-center Product-Details-Cart">
+                    <h5 class="card-title">Name: @Model.Name</h5>
+                    <h5 class="card-text">Price: @Model.SellingPrice</h5>
+                    <h5 class="card-text">Category: @Model.CategoryName</h5>
+                    <h5 class="card-text">Available: @Model.Quantity</h5>
+                </div>
+                <div style="margin:10px;">
+                    <a class="btn btn-primary" asp-action="List" asp-controller="Product">Add to Cart</a>
+                    <a class="btn btn-primary" asp-action="List" asp-controller="Product">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
