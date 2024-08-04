@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using OA.Data;
 using OA.Services;
@@ -14,9 +15,28 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<ICategoryModelFactory, CategoryModelFactory>();  
+builder.Services.AddScoped<ICategoryModelFactory, CategoryModelFactory>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductModelFactory, ProductModelFactory>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAccountModelFactory, AccountModelFactory>();
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(option =>
+    {
+        option.ExpireTimeSpan = TimeSpan.FromMinutes(60 * 1);
+        option.LoginPath = "/Account/Login";
+        option.AccessDeniedPath = "/Account/Login";
+    });
+builder.Services.AddSession(option =>
+{
+    option.IdleTimeout = TimeSpan.FromMinutes(5);
+    option.Cookie.HttpOnly = true;
+    option.Cookie.IsEssential = true;
+
+});
+
 
 var app = builder.Build();
 
@@ -32,7 +52,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
