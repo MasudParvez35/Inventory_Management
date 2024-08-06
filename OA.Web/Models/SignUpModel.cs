@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OA_WEB.Models
 {
-    public class SignUpModel : BaseEntity
+    public class SignUpModel 
     {
         [Required(ErrorMessage = "Please enter username")]
         [Remote(action: "UserNameIsExist", controller: "Account")]

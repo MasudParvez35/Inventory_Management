@@ -32,7 +32,6 @@ namespace OA_WEB.Factories
                 {
                     model = new SignUpModel
                     {
-                        Id = user.Id,
                         UserName = user.Name,
                         Email = user.Email,
                         Password = user.Password,
@@ -42,7 +41,6 @@ namespace OA_WEB.Factories
                 }
                 else
                 {
-                    model.Id = user.Id;
                     model.UserName = user.Name;
                     model.Email = user.Email;
                     model.Password = user.Password;

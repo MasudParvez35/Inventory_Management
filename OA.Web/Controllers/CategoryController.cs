@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OA.Core.Domain;
 using OA.Services;
 using OA_WEB.Factories;
@@ -36,6 +37,7 @@ namespace OA_WEB.Controllers
             return View(model);
         }
 
+        [Authorize]
         public async Task<IActionResult> Create()
         {
             var model = await _categoryModelFactory.PrepareCategoryModelAsync(new CategoryModel(), null);
@@ -43,6 +45,7 @@ namespace OA_WEB.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CategoryModel model)
         {
@@ -63,6 +66,7 @@ namespace OA_WEB.Controllers
             return View(model);
         }
 
+        [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
             var category = await _categoryService.GetCategoryByIdAsync(id);
@@ -74,6 +78,7 @@ namespace OA_WEB.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Edit(CategoryModel model)
         {
@@ -95,6 +100,7 @@ namespace OA_WEB.Controllers
             return View(model);
         }
 
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var category = await _categoryService.GetCategoryByIdAsync(id);
@@ -106,6 +112,7 @@ namespace OA_WEB.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Delete(CategoryModel model)
         {

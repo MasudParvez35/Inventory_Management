@@ -55,7 +55,6 @@ namespace OA_WEB.Controllers
                         HttpContext.Session.SetString("Username", model.UserName);
 
                         return RedirectToAction("List", "Product");
-
                     }
                     else
                     {
@@ -103,6 +102,7 @@ namespace OA_WEB.Controllers
             else
             {
                 TempData["errorMessage"] = "Empty form can't be submitted!";
+                model = await _accountModelFactory.PrepareSignUpModelAsync(model, null);
                 return View(model);
             }
         }
