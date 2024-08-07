@@ -7,5 +7,7 @@
         public string Password { get; set; }
         public string Mobile { get; set; }
         public string Address { get; set; }
+
+        public ICollection<ShoppingCartItem> ShoppingCartItems { get; set; }
     }
 }
