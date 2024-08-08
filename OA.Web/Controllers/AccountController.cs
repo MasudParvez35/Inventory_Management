@@ -31,6 +31,34 @@ namespace OA_WEB.Controllers
 
         #region Methods
 
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            // Check if the user is authenticated
+            if (User.Identity.IsAuthenticated)
+            {
+                // Retrieve the username and user ID from the claims
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                // Convert the user ID to an integer
+                if (int.TryParse(userIdClaim, out int userId))
+                {
+                    // Use the username and user ID as needed, e.g., return it in a view or JSON
+                    return Json(new { Username = username, UserId = userId });
+                }
+                else
+                {
+                    // Handle the case where the user ID is not valid
+                    return BadRequest("User ID is invalid.");
+                }
+            }
+            else
+            {
+                // User is not authenticated
+                return Unauthorized("User is not logged in.");
+            }
+        }
+
         public async Task<IActionResult> Login()
         {
             var model = await _accountModelFactory.PrepareLoginModelModelAsync(new LoginModel(), null);
@@ -49,7 +77,14 @@ namespace OA_WEB.Controllers
                     bool isValid = (user.Name == model.UserName && (user.Password) == model.Password);
                     if (isValid)
                     {
-                        var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, model.UserName) }, CookieAuthenticationDefaults.AuthenticationScheme);
+                        //var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, model.UserName) }, CookieAuthenticationDefaults.AuthenticationScheme);
+                        // Add the user ID as a claim
+                        var identity = new ClaimsIdentity(new[]
+                        {
+                            new Claim(ClaimTypes.Name, model.UserName),
+                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) // Add user ID here
+                        }, CookieAuthenticationDefaults.AuthenticationScheme);
+
                         var principal = new ClaimsPrincipal(identity);
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                         HttpContext.Session.SetString("Username", model.UserName);

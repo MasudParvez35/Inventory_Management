@@ -37,6 +37,9 @@
 
                 @if (User.Identity.IsAuthenticated)
                 {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="ShoppingCart" asp-action="List">Cart</a>
+                    </li>
                     <div class="navbar float-right">
                         <span class="text-success font-weight-bold p-2">@User.Identity.Name.ToUpper()</span><a class="btn btn-sm btn-danger font-weight-bold" asp-action="LogOut" asp-controller="Account">SignOut</a>
                     </div>

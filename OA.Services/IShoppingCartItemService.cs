@@ -7,5 +7,8 @@ namespace OA.Services
         Task InsertShoppingCartItemAsync(ShoppingCartItem shoppingCartItem);
         Task UpdateShoppingCartItemAsync(ShoppingCartItem shoppingCartItem);
         Task DeleteShoppingCartItemAsync(ShoppingCartItem shoppingCartItem);
+        Task<IEnumerable<ShoppingCartItem>> GetAllItems();
+        Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItemsByUserIdAsync(int userId);
+
     }
 }

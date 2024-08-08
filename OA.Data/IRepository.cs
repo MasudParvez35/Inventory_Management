@@ -1,4 +1,5 @@
 ﻿using OA.Core;
+using System.Linq.Expressions;
 
 namespace OA.Data
 {
@@ -11,5 +12,6 @@ namespace OA.Data
         Task SaveChangesAsync();
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByIdAsync(int id);
+        Task<IEnumerable<T>> FindByAsync(Expression<Func<T, bool>> predicate);
     }
 }

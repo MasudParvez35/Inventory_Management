@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OA.Core;
+using System.Linq.Expressions;
 
 namespace OA.Data
 {
@@ -56,6 +57,11 @@ namespace OA.Data
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<T>> FindByAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _entities.Where(predicate).ToListAsync();
         }
 
         #endregion
