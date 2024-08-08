@@ -21,10 +21,28 @@ namespace OA_WEB.Controllers
 
         public async Task<IActionResult> List()
         {
-            var cartItems = await _shoppingCartItemService.GetAllItems();
-            var model = await _shoppingCartItemModelFactory.PrepareShoppingCartItemListModelAsync(cartItems);
+            if (User.Identity.IsAuthenticated)
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (int.TryParse(userIdClaim, out int userId))
+                {
+                    var shoppingCartItems = await _shoppingCartItemService.GetShoppingCartItemsByUserIdAsync(userId);
 
-            return View(model);
+                    var model = await _shoppingCartItemModelFactory.PrepareShoppingCartItemListModelAsync(shoppingCartItems);
+
+                    return View(model);
+                }
+                else
+                {
+                    TempData["errorMessage"] = "Failed to retrieve user ID.";
+                }
+            }
+            else
+            {
+                TempData["errorMessage"] = "User is not logged in.";
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
@@ -32,14 +50,11 @@ namespace OA_WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Retrieve the user ID from the claims
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (int.TryParse(userIdClaim, out int userId))
                 {
-                    // Create a new shopping cart item with the logged-in user ID
                     var cart = new ShoppingCartItem()
                     {
-                        UserId = userId, // Use the user ID from the claims
                         ProductId = model.ProductId,
                         Quantity = model.Quantity
                     };
@@ -52,7 +67,6 @@ namespace OA_WEB.Controllers
                 }
                 else
                 {
-                    // Handle the case where the user ID is not valid
                     TempData["errorMessage"] = "Failed to retrieve user ID.";
                 }
             }
