@@ -80,5 +80,21 @@ namespace OA_WEB.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCart(ShoppingCartItem cart, ShoppingCartItemModel model)
+        {
+            var ShoppingCartItem = await _shoppingCartItemService.GetShoppingCartItemByIdAsync(model.UserId);
+
+            if (ShoppingCartItem != null)
+            {
+                //ShoppingCartItem.Quantity = item.Quantity;
+                await _shoppingCartItemService.UpdateShoppingCartItemAsync(ShoppingCartItem);
+            }
+
+            TempData["successMessage"] = "Cart updated successfully!";
+
+            return RedirectToAction("List"); 
+        }
     }
 }

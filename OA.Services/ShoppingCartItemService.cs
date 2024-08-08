@@ -23,6 +23,11 @@ namespace OA.Services
             return await _shoppingCartRepository.GetAllAsync();
         }
 
+        public virtual async Task<ShoppingCartItem> GetShoppingCartItemByIdAsync(int shoppingCartItemId)
+        {
+            return await _shoppingCartRepository.GetByIdAsync(shoppingCartItemId);
+        }
+
         public virtual async Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItemsByUserIdAsync(int userId)
         {
             // Define the predicate to filter by userId
