@@ -1,4 +1,4 @@
-﻿@model OA_WEB.Models.ProductModel
+﻿@model ProductModel
 
 @{
     ViewData["Title"] = "Details";
@@ -16,7 +16,11 @@
                     <h5 class="card-text">Available: @Model.Quantity</h5>
                 </div>
                 <div style="margin:10px;">
-                    <a class="btn btn-primary" asp-action="List" asp-controller="Product">Add to Cart</a>
+                    <form asp-action="AddToCart" asp-controller="ShoppingCart" method="post">
+                        <input type="hidden" name="ProductId" value="@Model.Id" />
+                        <input type="hidden" name="Quantity" value="1" /> <!-- Default quantity is 1 -->
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
                     <a class="btn btn-primary" asp-action="List" asp-controller="Product">Back to List</a>
                 </div>
             </div>

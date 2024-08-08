@@ -1,14 +1,17 @@
 ﻿@model OA_WEB.Models.ProductModel
 
 <div class="form-group">
-    <label asp-for="ImagePath"></label>
+    <label asp-for="ImagePath">Image</label>
     @if (!string.IsNullOrEmpty(Model.ImagePath))
     {
-        <img src="@Model.ImagePath" alt="Current Image" style="max-width: 200px;" />
+        <img src="@Model.ImagePath" alt="Current Image" style="max-width: 200px; margin-bottom: 10px;" />
         <input type="hidden" asp-for="ImagePath" />
     }
-    <input type="file" name="file" class="form-control border-0 shadow" />
-    <span class="text-danger" asp-validation-for="ImagePath"></span>
+    else
+    {
+        <input type="file" name="file" class="form-control border-0 shadow" />
+        <span class="text-danger" asp-validation-for="ImagePath"></span>
+    }
 </div>
 
 <div class="form-group">

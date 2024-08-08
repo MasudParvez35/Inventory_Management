@@ -1,50 +1,69 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OA.Core;
+using System.Linq.Expressions;
 
 namespace OA.Data
 {
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {
-        private readonly ApplicationDbContext context;
-        private readonly DbSet<T> entities;
+        #region Fields
 
+        private readonly ApplicationDbContext _context;
+        private readonly DbSet<T> _entities;
+
+        #endregion
+
+        #region Ctor
         public Repository(ApplicationDbContext context)
         {
-            this.context = context;
-            entities = context.Set<T>();
+            _context = context;
+            _entities = context.Set<T>();
         }
+
+        #endregion
+
+        #region Methods
+
+        public IQueryable<T> Table => _entities;
 
         public async Task InsertAsync(T entity)
         {
-            await entities.AddAsync(entity);
+            await _entities.AddAsync(entity);
             await SaveChangesAsync();
         }
 
         public async Task UpdateAsync(T entity)
         {
-            entities.Update(entity);
+            _entities.Update(entity);
             await SaveChangesAsync();
         }
 
         public async Task DeleteAsync(T entity)
         {
-            entities.Remove(entity);
+            _entities.Remove(entity);
             await SaveChangesAsync();
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await entities.ToListAsync();
+            return await _entities.ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await entities.FirstOrDefaultAsync(x => x.Id == id);
+            return await _entities.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task SaveChangesAsync()
         {
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<T>> FindByAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _entities.Where(predicate).ToListAsync();
+        }
+
+        #endregion
     }
 }
