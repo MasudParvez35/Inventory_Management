@@ -55,6 +55,7 @@ namespace OA_WEB.Controllers
                 {
                     var cart = new ShoppingCartItem()
                     {
+                        UserId = userId,
                         ProductId = model.ProductId,
                         Quantity = model.Quantity
                     };

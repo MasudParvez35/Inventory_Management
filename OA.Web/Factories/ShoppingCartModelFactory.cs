@@ -7,10 +7,13 @@ namespace OA_WEB.Factories
     public class ShoppingCartModelFactory : IShoppingCartModelFactory
     {
         protected readonly IShoppingCartItemService _shoppingCartItemService;
+        protected readonly IProductService _productService;
 
-        public ShoppingCartModelFactory(IShoppingCartItemService shoppingCartItemService)
+        public ShoppingCartModelFactory(IShoppingCartItemService shoppingCartItemService, 
+            IProductService productService)
         {
             _shoppingCartItemService = shoppingCartItemService;
+            _productService = productService;
         }
 
         public async Task<IList<ShoppingCartItemModel>> PrepareShoppingCartItemListModelAsync(IEnumerable<ShoppingCartItem> shoppingCartItems)
@@ -36,6 +39,15 @@ namespace OA_WEB.Factories
                         ProductId = shoppingCartItem.ProductId,
                         Quantity = shoppingCartItem.Quantity
                     };
+
+                    // Fetch additional product details
+                    var product = await _productService.GetProductByIdAsync(shoppingCartItem.ProductId);
+                    if (product != null)
+                    {
+                        model.ProductName = product.Name;
+                        model.ProductImage = product.ImagePath; // Assuming ImagePath is a property in Product
+                        model.Price = product.SellingPrice;
+                    }
                 }
             }
 
