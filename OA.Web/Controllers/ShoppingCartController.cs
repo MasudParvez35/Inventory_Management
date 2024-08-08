@@ -9,8 +9,14 @@ namespace OA_WEB.Controllers
 {
     public class ShoppingCartController : Controller
     {
+        #region Fields
+
         protected readonly IShoppingCartItemService _shoppingCartItemService;
         protected readonly IShoppingCartModelFactory _shoppingCartItemModelFactory;
+
+        #endregion
+
+        #region Ctor
 
         public ShoppingCartController(IShoppingCartItemService shoppingCartItemService,
             IShoppingCartModelFactory shoppingCartItemModelFactory)
@@ -18,6 +24,10 @@ namespace OA_WEB.Controllers
             _shoppingCartItemService = shoppingCartItemService;
             _shoppingCartItemModelFactory = shoppingCartItemModelFactory;
         }
+
+        #endregion
+
+        #region Methods
 
         public async Task<IActionResult> List()
         {
@@ -27,19 +37,9 @@ namespace OA_WEB.Controllers
                 if (int.TryParse(userIdClaim, out int userId))
                 {
                     var shoppingCartItems = await _shoppingCartItemService.GetShoppingCartItemsByUserIdAsync(userId);
-
                     var model = await _shoppingCartItemModelFactory.PrepareShoppingCartItemListModelAsync(shoppingCartItems);
-
                     return View(model);
                 }
-                else
-                {
-                    TempData["errorMessage"] = "Failed to retrieve user ID.";
-                }
-            }
-            else
-            {
-                TempData["errorMessage"] = "User is not logged in.";
             }
 
             return RedirectToAction("Index", "Home");
@@ -51,6 +51,7 @@ namespace OA_WEB.Controllers
             if (ModelState.IsValid)
             {
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
                 if (int.TryParse(userIdClaim, out int userId))
                 {
                     var cart = new ShoppingCartItem()
@@ -61,19 +62,10 @@ namespace OA_WEB.Controllers
                     };
 
                     await _shoppingCartItemService.InsertShoppingCartItemAsync(cart);
-
                     TempData["successMessage"] = "Item added to cart successfully!";
 
                     return RedirectToAction("List");
                 }
-                else
-                {
-                    TempData["errorMessage"] = "Failed to retrieve user ID.";
-                }
-            }
-            else
-            {
-                TempData["errorMessage"] = "Invalid cart item details.";
             }
 
             model = await _shoppingCartItemModelFactory.PrepareShoppingCartItemModelAsync(model, null);
@@ -82,19 +74,41 @@ namespace OA_WEB.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateCart(ShoppingCartItem cart, ShoppingCartItemModel model)
+        public async Task<IActionResult> UpdateCartItem(int id, int quantity)
         {
-            var ShoppingCartItem = await _shoppingCartItemService.GetShoppingCartItemByIdAsync(model.UserId);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (ShoppingCartItem != null)
+            if (int.TryParse(userIdClaim, out int userId))
             {
-                //ShoppingCartItem.Quantity = item.Quantity;
-                await _shoppingCartItemService.UpdateShoppingCartItemAsync(ShoppingCartItem);
+                var shoppingCartItem = await _shoppingCartItemService.GetShoppingCartItemByIdAsync(id);
+
+                if (shoppingCartItem != null && shoppingCartItem.UserId == userId)
+                {
+                    shoppingCartItem.Quantity = quantity;
+
+                    await _shoppingCartItemService.UpdateShoppingCartItemAsync(shoppingCartItem);
+                }
             }
 
-            TempData["successMessage"] = "Cart updated successfully!";
+            return RedirectToAction("List");
+        }
 
-            return RedirectToAction("List"); 
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCart(int id)
+        {
+            var shoppingCartItem = await _shoppingCartItemService.GetShoppingCartItemByIdAsync(id);
+
+            if (shoppingCartItem != null)
+            {
+                await _shoppingCartItemService.DeleteShoppingCartItemAsync(shoppingCartItem);
+
+                TempData["successMessage"] = "Item removed from cart successfully!";
+            }
+
+            return RedirectToAction("List");
         }
     }
+
+    #endregion
 }
