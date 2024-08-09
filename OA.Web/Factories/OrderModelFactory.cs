@@ -43,6 +43,7 @@ namespace OA_WEB.Factories
                         PaymentTypeId = order.PaymentTypeId,
                         OrderStatusId = order.OrderStatusId,
                         MobileNumber = order.MobileNumber,
+                        TransactionId = order.TransactionId,
                         Address = order.Address
                     };
                 }
@@ -61,13 +62,13 @@ namespace OA_WEB.Factories
                         Value = ((int)x).ToString()
                     }).ToList();
 
-                model.AvailableOrderStatus = Enum.GetValues(typeof(OrderStatus))
+                /*model.AvailableOrderStatus = Enum.GetValues(typeof(OrderStatus))
                     .Cast<OrderStatus>()
                     .Select(x => new SelectListItem
                     {
                         Text = x.ToString(),
                         Value = ((int)x).ToString()
-                    }).ToList();
+                    }).ToList();*/
             }
 
             return model;

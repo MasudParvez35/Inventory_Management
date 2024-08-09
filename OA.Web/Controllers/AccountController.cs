@@ -77,8 +77,6 @@ namespace OA_WEB.Controllers
                     bool isValid = (user.Name == model.UserName && (user.Password) == model.Password);
                     if (isValid)
                     {
-                        //var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, model.UserName) }, CookieAuthenticationDefaults.AuthenticationScheme);
-                        // Add the user ID as a claim
                         var identity = new ClaimsIdentity(new[]
                         {
                             new Claim(ClaimTypes.Name, model.UserName),

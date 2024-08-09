@@ -22,7 +22,7 @@ namespace OA.Services
             return await _orderRepository.GetAllAsync();
         }
 
-        public virtual async Task<Order> GetByOrderIdAsync(int id)
+        public virtual async Task<Order> GetOrderByIdAsync(int id)
         {
             return await _orderRepository.GetByIdAsync(id);
         }

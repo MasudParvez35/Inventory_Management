@@ -162,44 +162,6 @@ namespace OA_WEB.Controllers
             return View(model);
         }
 
-        /*public async Task<IActionResult> Edit(int id)
-        {
-            var product = await _productService.GetProductByIdAsync(id);
-            if (product == null)
-                return RedirectToAction("List");
-
-            var model = await _productModelFactory.PrepareProductModelAsync(null, product);
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Edit(ProductModel model)
-        {
-            var product = await _productService.GetProductByIdAsync(model.Id);
-            if (product == null)
-                return RedirectToAction("List");
-
-            if (ModelState.IsValid)
-            {
-                product.Name = model.Name;
-                product.ImagePath = model.ImagePath;
-                product.Description = model.Description;
-                product.CategoryId = model.CategoryId;
-                product.BuyingPrice = model.BuyingPrice;
-                product.SellingPrice = model.SellingPrice;
-                product.Quantity = model.Quantity;
-
-                await _productService.UpdateProductAsync(product);
-
-                return RedirectToAction("List");
-            }
-
-            model = await _productModelFactory.PrepareProductModelAsync(model, product);
-
-            return View(model);
-        }*/
-
         public async Task<IActionResult> Delete(int id)
         {
             var product = await _productService.GetProductByIdAsync(id);

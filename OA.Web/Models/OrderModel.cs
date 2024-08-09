@@ -8,7 +8,6 @@ namespace OA_WEB.Models
     {
         public OrderModel()
         {
-            AvailableOrderStatus = [];
             AvailablePaymentType = [];
         }
 
@@ -16,6 +15,7 @@ namespace OA_WEB.Models
         public int PaymentTypeId { get; set; }
         public int OrderStatusId { get; set; }
         public string MobileNumber { get; set; }
+        public string TransactionId { get; set; }
         public string Address { get; set; }
 
         #region Custom Properties
@@ -26,7 +26,6 @@ namespace OA_WEB.Models
         public string OrderStatusStr { get; set; }
 
         public List<SelectListItem> AvailablePaymentType { get; set; }
-        public List<SelectListItem> AvailableOrderStatus { get; set; }
 
         #endregion
     }

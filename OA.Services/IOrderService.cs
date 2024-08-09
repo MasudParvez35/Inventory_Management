@@ -7,7 +7,7 @@ namespace OA.Services
         Task InsertOrderAsync(Order order);
         Task UpdateOrderAsync(Order order);
         Task DeleteOrderAsync(Order order);
-        Task<Order> GetByOrderIdAsync(int id);
+        Task<Order> GetOrderByIdAsync(int id);
         Task <IEnumerable<Order>> GetAllOrderAsync();
     }
 }

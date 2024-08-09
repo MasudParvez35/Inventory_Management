@@ -42,11 +42,6 @@ namespace OA_WEB.Controllers
         {
             var model = await _orderModelFactory.PrepareOrderModelAsync(new OrderModel(), null);
 
-            if (model.AvailableOrderStatus.Any())
-            {
-                model.OrderStatusId = int.Parse(model.AvailableOrderStatus.First().Value);
-            }
-
             if (User.Identity.IsAuthenticated)
             {
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -70,6 +65,7 @@ namespace OA_WEB.Controllers
                     PaymentTypeId = model.PaymentTypeId,
                     OrderStatusId = model.OrderStatusId,
                     MobileNumber = model.MobileNumber,
+                    TransactionId = model.TransactionId,
                     Address = model.Address
                 };
 
@@ -81,6 +77,18 @@ namespace OA_WEB.Controllers
             model = await _orderModelFactory.PrepareOrderModelAsync(model, null);
 
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var order = await _orderService.GetOrderByIdAsync(id);
+            if (order == null)
+                return RedirectToAction("List");
+
+            await _orderService.DeleteOrderAsync(order);
+
+            return RedirectToAction("List");
         }
 
         #endregion
