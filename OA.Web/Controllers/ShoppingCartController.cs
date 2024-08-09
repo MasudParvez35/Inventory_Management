@@ -38,11 +38,12 @@ namespace OA_WEB.Controllers
                 {
                     var shoppingCartItems = await _shoppingCartItemService.GetShoppingCartItemsByUserIdAsync(userId);
                     var model = await _shoppingCartItemModelFactory.PrepareShoppingCartItemListModelAsync(shoppingCartItems);
+
                     return View(model);
                 }
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("List");
         }
 
         [HttpPost]

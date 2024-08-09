@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using OA.Core;
 
 namespace OA_WEB.Models
@@ -19,7 +20,9 @@ namespace OA_WEB.Models
 
         #region Custom Properties
 
+        [ValidateNever]
         public string PaymentTypeStr { get; set; }
+        [ValidateNever]
         public string OrderStatusStr { get; set; }
 
         public List<SelectListItem> AvailablePaymentType { get; set; }

@@ -38,6 +38,38 @@ namespace OA.Data.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("OA.Core.Domain.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MobileNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("OA.Core.Domain.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -99,7 +131,7 @@ namespace OA.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("shoppingCartItems");
+                    b.ToTable("ShoppingCartItems");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.User", b =>
@@ -135,36 +167,15 @@ namespace OA.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Order", b =>
+            modelBuilder.Entity("OA.Core.Domain.Order", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.HasOne("OA.Core.Domain.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MobileNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OrderStatusId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PaymentTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Orders");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.Product", b =>
@@ -195,15 +206,6 @@ namespace OA.Data.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Order", b =>
-                {
-                    b.HasOne("OA.Core.Domain.User", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("OA.Core.Domain.Category", b =>

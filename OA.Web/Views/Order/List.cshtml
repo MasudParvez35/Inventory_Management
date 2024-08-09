@@ -10,7 +10,6 @@
     <thead>
         <tr>
             <th>Order ID</th>
-            <th>User ID</th>
             <th>Payment Type</th>
             <th>Order Status</th>
             <th>Mobile Number</th>
@@ -25,7 +24,6 @@
             {
                 <tr>
                     <td>@order.Id</td>
-                    <td>@order.UserId</td>
                     <td>@order.PaymentTypeStr</td>
                     <td>@order.OrderStatusStr</td>
                     <td>@order.MobileNumber</td>
@@ -41,7 +39,7 @@
         else
         {
             <tr>
-                <td colspan="7">No orders found.</td>
+                <td colspan="6">No orders found.</td>
             </tr>
         }
     </tbody>

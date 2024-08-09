@@ -7,7 +7,7 @@ namespace OA_WEB.Factories
 {
     public class OrderModelFactory : IOrderModelFactory
     {
-        protected readonly IOrderService _orderService;
+        private readonly IOrderService _orderService;
 
         public OrderModelFactory(IOrderService orderService)
         {
@@ -18,8 +18,14 @@ namespace OA_WEB.Factories
         {
             var model = new List<OrderModel>();
 
-            foreach (var order in orders)
-                model.Add(await PrepareOrderModelAsync(null, order));
+            if (orders != null)
+            {
+                foreach (var order in orders)
+                {
+                    var orderModel = await PrepareOrderModelAsync(null, order);
+                    model.Add(orderModel);
+                }
+            }
 
             return model;
         }
@@ -30,7 +36,7 @@ namespace OA_WEB.Factories
             {
                 if (model == null)
                 {
-                    model = new OrderModel()
+                    model = new OrderModel
                     {
                         Id = order.Id,
                         UserId = order.UserId,
@@ -41,8 +47,8 @@ namespace OA_WEB.Factories
                     };
                 }
 
-                //model.PaymentTypeStr = (order.PaymentType).ToString();
-                //model.OrderStatusStr = (order.OrderStatus).ToString();
+                model.PaymentTypeStr = order.PaymentType.ToString();
+                model.OrderStatusStr = order.OrderStatus.ToString();
             }
 
             if (!excludeProperties)

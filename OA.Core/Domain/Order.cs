@@ -1,20 +1,32 @@
-﻿using OA.Core.Domain;
-using OA.Core;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-public class Order : BaseEntity
+namespace OA.Core.Domain
 {
-    public int UserId { get; set; }
-    public int PaymentTypeId { get; set; }
-    public int OrderStatusId { get; set; }
-    public string MobileNumber { get; set; }
-    public string Address { get; set; }
+    public class Order : BaseEntity
+    {
+        public int UserId { get; set; }
+        [ForeignKey("UserId")]
+        public string MobileNumber { get; set; }
+        public string Address { get; set; }
+        public int PaymentTypeId { get; set; }
+        public int OrderStatusId { get; set; }
 
-    /*public User User { get; set; }
+        // Navigation property
+        public User User { get; set; }
 
-    [ForeignKey(nameof(PaymentTypeId))]
-    public PaymentType PaymentType { get; set; }
+        // Enum properties for convenience
+        [NotMapped]
+        public PaymentType PaymentType
+        {
+            get => (PaymentType)PaymentTypeId;
+            set => PaymentTypeId = (int)value;
+        }
 
-    [ForeignKey(nameof(OrderStatusId))]
-    public OrderStatus OrderStatus { get; set; }*/
+        [NotMapped]
+        public OrderStatus OrderStatus
+        {
+            get => (OrderStatus)OrderStatusId;
+            set => OrderStatusId = (int)value;
+        }
+    }
 }

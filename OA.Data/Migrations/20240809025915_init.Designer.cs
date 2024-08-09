@@ -11,8 +11,8 @@ using OA.Data;
 namespace OA.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240809023539_order")]
-    partial class order
+    [Migration("20240809025915_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,13 +57,7 @@ namespace OA.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrderStatus")
-                        .HasColumnType("int");
-
                     b.Property<int>("OrderStatusId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PaymentType")
                         .HasColumnType("int");
 
                     b.Property<int>("PaymentTypeId")
@@ -140,7 +134,7 @@ namespace OA.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("shoppingCartItems");
+                    b.ToTable("ShoppingCartItems");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.User", b =>
