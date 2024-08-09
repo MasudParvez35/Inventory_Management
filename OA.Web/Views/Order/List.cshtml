@@ -1,0 +1,48 @@
+﻿@model List<OrderModel>
+
+@{
+    ViewData["Title"] = "Order List";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>User ID</th>
+            <th>Payment Type</th>
+            <th>Order Status</th>
+            <th>Mobile Number</th>
+            <th>Address</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.UserId</td>
+                    <td>@order.PaymentTypeStr</td>
+                    <td>@order.OrderStatusStr</td>
+                    <td>@order.MobileNumber</td>
+                    <td>@order.Address</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@order.Id" class="btn btn-primary btn-sm">Edit</a>
+                        <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-info btn-sm">Details</a>
+                        <a asp-action="Delete" asp-route-id="@order.Id" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7">No orders found.</td>
+            </tr>
+        }
+    </tbody>
+</table>

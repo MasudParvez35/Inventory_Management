@@ -32,7 +32,7 @@ namespace OA.Services
             return await _productsRepository.GetByIdAsync(productId);
         }
 
-        public async Task<IEnumerable<Product>> GetAllProduct()
+        public async Task<IEnumerable<Product>> GetAllProductAsync()
         {
             return await _productsRepository.GetAllAsync();
         }

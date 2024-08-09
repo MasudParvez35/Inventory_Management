@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OA.Data;
 
@@ -10,9 +11,11 @@ using OA.Data;
 namespace OA.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240809024034_orders")]
+    partial class orders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,7 +154,13 @@ namespace OA.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
                     b.Property<int>("OrderStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentType")
                         .HasColumnType("int");
 
                     b.Property<int>("PaymentTypeId")
@@ -199,11 +208,13 @@ namespace OA.Data.Migrations
 
             modelBuilder.Entity("Order", b =>
                 {
-                    b.HasOne("OA.Core.Domain.User", null)
+                    b.HasOne("OA.Core.Domain.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.Category", b =>

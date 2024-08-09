@@ -35,7 +35,7 @@ namespace OA_WEB.Controllers
 
         public async Task<IActionResult> List()
         {
-            var products = await _productService.GetAllProduct();
+            var products = await _productService.GetAllProductAsync();
             var model = await _productModelFactory.PrepareProductListModelAsync(products);
 
             return View(model);

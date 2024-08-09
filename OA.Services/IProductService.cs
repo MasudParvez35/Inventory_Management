@@ -8,6 +8,6 @@ namespace OA.Services
         Task UpdateProductAsync(Product product);
         Task DeleteProductAsync(Product product);
         Task<Product> GetProductByIdAsync(int productId);
-        Task<IEnumerable<Product>> GetAllProduct();
+        Task<IEnumerable<Product>> GetAllProductAsync();
     }
 }

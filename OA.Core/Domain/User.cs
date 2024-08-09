@@ -9,5 +9,6 @@
         public string Address { get; set; }
 
         public ICollection<ShoppingCartItem> ShoppingCartItems { get; set; }
+        public ICollection<Order> Orders { get; set; }
     }
 }

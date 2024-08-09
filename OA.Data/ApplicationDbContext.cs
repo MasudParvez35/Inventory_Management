@@ -13,9 +13,12 @@ namespace OA.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<ShoppingCartItem> shoppingCartItems {  get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Category>()
                 .HasMany(c => c.Products)
                 .WithOne(p => p.Category)
@@ -33,7 +36,11 @@ namespace OA.Data
                 .WithMany(p => p.ShoppingCartItems)
                 .HasForeignKey(sci => sci.ProductId);
 
-            base.OnModelCreating(modelBuilder);
+            // Configuring the relationship between User and Order
+            /*modelBuilder.Entity<Order>()
+                .HasOne(sci => sci.User)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(sci => sci.UserId);*/
         }
     }
 }
