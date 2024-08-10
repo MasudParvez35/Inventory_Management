@@ -10,14 +10,17 @@ namespace OA_WEB.Factories
         #region Fields
 
         protected readonly IOrderService _orderService;
+        protected readonly IAccountService _accountService;
 
         #endregion
 
         #region Ctor
 
-        public OrderModelFactory(IOrderService orderService)
+        public OrderModelFactory(IOrderService orderService, 
+            IAccountService accountService)
         {
             _orderService = orderService;
+            _accountService = accountService;
         }
 
         #endregion
@@ -59,6 +62,8 @@ namespace OA_WEB.Factories
                     };
                 }
 
+                var currentUser = await _accountService.GetUserByIdAsync(order.UserId);
+                model.UserName = currentUser.Name;
                 model.PaymentTypeStr = order.PaymentType.ToString();
                 model.OrderStatusStr = order.OrderStatus.ToString();
             }

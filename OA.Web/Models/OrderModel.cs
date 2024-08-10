@@ -26,7 +26,11 @@ namespace OA_WEB.Models
         #region Custom Properties
 
         [ValidateNever]
+        public string UserName { get; set; }
+
+        [ValidateNever]
         public string PaymentTypeStr { get; set; }
+
         [ValidateNever]
         public string OrderStatusStr { get; set; }
 

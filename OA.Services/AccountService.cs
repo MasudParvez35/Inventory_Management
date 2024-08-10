@@ -30,7 +30,13 @@ namespace OA.Services
 
         public virtual async Task<User> GetUserByUsernameAsync(string username)
         {
-            return await _userRepository.Table.FirstOrDefaultAsync(u => u.Name == username);
+            return await _userRepository.Table.
+                        FirstOrDefaultAsync(u => u.Name == username);
+        }
+
+        public virtual async Task<User> GetUserByIdAsync(int userId)
+        {
+            return await _userRepository.GetByIdAsync(userId);
         }
 
         #endregion
