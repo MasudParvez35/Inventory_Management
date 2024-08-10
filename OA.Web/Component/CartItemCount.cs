@@ -6,12 +6,22 @@ namespace OA_WEB.Component
 {
     public class CartItemCountViewComponent : ViewComponent
     {
+        #region Fields
+
         private readonly IShoppingCartItemService _shoppingCartItemService;
+
+        #endregion
+
+        #region Ctor
 
         public CartItemCountViewComponent(IShoppingCartItemService shoppingCartItemService)
         {
             _shoppingCartItemService = shoppingCartItemService;
         }
+
+        #endregion
+
+        #region Methods
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
@@ -32,5 +42,6 @@ namespace OA_WEB.Component
             return View(0); 
         }
 
+        #endregion
     }
 }

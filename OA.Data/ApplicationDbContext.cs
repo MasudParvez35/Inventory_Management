@@ -12,10 +12,14 @@ namespace OA.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<ShoppingCartItem> shoppingCartItems {  get; set; }
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; } // Corrected naming
+        public DbSet<Order> Orders { get; set; } // Added Orders DbSet
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            // Configuring the relationship between Category and Product
             modelBuilder.Entity<Category>()
                 .HasMany(c => c.Products)
                 .WithOne(p => p.Category)
@@ -33,7 +37,20 @@ namespace OA.Data
                 .WithMany(p => p.ShoppingCartItems)
                 .HasForeignKey(sci => sci.ProductId);
 
-            base.OnModelCreating(modelBuilder);
+            // Configuring the relationship between User and Order
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(o => o.UserId);
+
+            // Optional: Configure the enums to be stored as integers
+            modelBuilder.Entity<Order>()
+                .Property(o => o.PaymentTypeId)
+                .HasConversion<int>();
+
+            modelBuilder.Entity<Order>()
+                .Property(o => o.OrderStatusId)
+                .HasConversion<int>();
         }
     }
 }

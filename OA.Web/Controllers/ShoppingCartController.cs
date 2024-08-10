@@ -38,11 +38,12 @@ namespace OA_WEB.Controllers
                 {
                     var shoppingCartItems = await _shoppingCartItemService.GetShoppingCartItemsByUserIdAsync(userId);
                     var model = await _shoppingCartItemModelFactory.PrepareShoppingCartItemListModelAsync(shoppingCartItems);
+
                     return View(model);
                 }
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("List");
         }
 
         [HttpPost]
@@ -93,7 +94,6 @@ namespace OA_WEB.Controllers
             return RedirectToAction("List");
         }
 
-
         [HttpPost]
         public async Task<IActionResult> RemoveFromCart(int id)
         {
@@ -107,17 +107,6 @@ namespace OA_WEB.Controllers
             }
 
             return RedirectToAction("List");
-        }
-
-        public async Task<int> GetCartItemCountAsync()
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (int.TryParse(userIdClaim, out int userId))
-            {
-                var items = await _shoppingCartItemService.GetShoppingCartItemsByUserIdAsync(userId);
-                return items.Count();
-            }
-            return 0;
         }
     }
 

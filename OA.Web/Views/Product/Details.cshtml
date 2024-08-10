@@ -1,29 +1,39 @@
 ﻿@model ProductModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Product Details";
 }
 
 <div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <img src="@Model.ImagePath" class="card-img-top" alt="@Model.Name" style="height: 300px; width:300px; margin:auto;">
-                <div class="card-body text-center Product-Details-Cart">
-                    <h5 class="card-title">Name: @Model.Name</h5>
-                    <h5 class="card-text">Price: @Model.SellingPrice</h5>
-                    <h5 class="card-text">Category: @Model.CategoryName</h5>
-                    <h5 class="card-text">Available: @Model.Quantity</h5>
-                </div>
-                <div style="margin:10px;">
-                    <form asp-action="AddToCart" asp-controller="ShoppingCart" method="post">
-                        <input type="hidden" name="ProductId" value="@Model.Id" />
-                        <input type="hidden" name="Quantity" value="1" /> <!-- Default quantity is 1 -->
-                        <button type="submit" class="btn btn-primary">Add to Cart</button>
-                    </form>
-                    <a class="btn btn-primary" asp-action="List" asp-controller="Product">Back to List</a>
-                </div>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="d-flex justify-content-center">
+                <img src="@Model.ImagePath" alt="@Model.Name" style="height: 300px; width: 300px; object-fit: cover; border-radius: 15px;">
+            </div>
+            <div class="mt-4 text-center">
+                <h2>@Model.Name</h2>
+                <p class="text-secondary font-weight-bold">Price: $@Model.SellingPrice</p>
+                <p class="text-muted">Category: @Model.CategoryName</p>
+                <p class="text-success">Available: @Model.Quantity</p>
+                <p class="text-dark mt-3">@Model.Description</p>
+            </div>
+            <div class="mt-4">
+                <form asp-action="AddToCart" asp-controller="ShoppingCart" method="post" class="d-flex justify-content-between align-items-center">
+                    <div class="form-group mb-0">
+                        <label for="quantity" class="mr-2">Quantity:</label>
+                        <input type="number" id="quantity" name="Quantity" class="form-control d-inline" style="width: 80px;" min="1" max="@Model.Quantity" value="1" required />
+                    </div>
+                    <input type="hidden" name="ProductId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-primary ml-3">Add to Cart</button>
+                    <a class="btn btn-secondary ml-3" asp-action="List" asp-controller="Product">Back to List</a>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    img {
+        border-radius: 15px;
+    }
+</style>

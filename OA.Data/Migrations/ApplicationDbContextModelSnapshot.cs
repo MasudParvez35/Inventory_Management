@@ -38,6 +38,45 @@ namespace OA.Data.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("OA.Core.Domain.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MobileNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("TransactionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("OA.Core.Domain.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -99,7 +138,7 @@ namespace OA.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("shoppingCartItems");
+                    b.ToTable("ShoppingCartItems");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.User", b =>
@@ -133,6 +172,17 @@ namespace OA.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("OA.Core.Domain.Order", b =>
+                {
+                    b.HasOne("OA.Core.Domain.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.Product", b =>
@@ -177,6 +227,8 @@ namespace OA.Data.Migrations
 
             modelBuilder.Entity("OA.Core.Domain.User", b =>
                 {
+                    b.Navigation("Orders");
+
                     b.Navigation("ShoppingCartItems");
                 });
 #pragma warning restore 612, 618

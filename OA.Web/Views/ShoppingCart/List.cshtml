@@ -10,12 +10,18 @@
     @if (!Model.Any())
     {
         <p class="text-center">Your cart is empty.</p>
+
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <div>
+                <a class="btn btn-primary" asp-action="List" asp-controller="Product">Continue Shopping</a>
+            </div>
+        </div>
     }
     else
     {
         <table class="table table-bordered text-center">
             <thead>
-                <tr style="background:lightslategrey;">
+                <tr style="background:darkorchid;">
                     <th>Image</th>
                     <th>Product Name</th>
                     <th>Price</th>
@@ -57,7 +63,7 @@
             <h4>Total Price : $ <b><span style="color:red;">@totalPrice</span></b> Taka</h4>
             <div>
                 <a class="btn btn-primary" asp-action="List" asp-controller="Product">Continue Shopping</a>
-                <a class="btn btn-success" asp-action="Checkout" asp-controller="ShoppingCart">Checkout</a>
+                <a class="btn btn-success" asp-action="Create" asp-controller="Order">Checkout</a>
             </div>
         </div>
     }
