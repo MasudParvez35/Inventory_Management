@@ -43,9 +43,8 @@
                             <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control mx-auto" style="width: 80px;" form="update-form-@item.Id" />
                         </td>
                         <td>
-                            <form asp-action="AddToCart" asp-controller="ShoppingCart" method="post" style="display:inline;">
-                                <input type="hidden" name="ProductId" value="@item.ProductId" />
-                                <input type="hidden" name="Quantity" value="@item.Quantity" />
+                            <form asp-action="MoveToCart" asp-controller="ShoppingCart" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="@item.Id" />
                                 <button type="submit" class="btn btn-primary btn-sm">Add to cart</button>
                             </form>
                             <form id="update-form-@item.Id" asp-action="UpdateWishlistItem" asp-controller="ShoppingCart" method="post" style="display:inline;">

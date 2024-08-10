@@ -196,6 +196,22 @@ namespace OA_WEB.Controllers
             return RedirectToAction("Wishlist");
         }
 
+        public async Task<IActionResult> MoveToCart(int id)
+        {
+            var shoppingCartItem = await _shoppingCartItemService.GetShoppingCartItemByIdAsync(id);
+
+            if (shoppingCartItem != null)
+            {
+                shoppingCartItem.ShoppingCartTypeId = (int)ShoppingCartType.ShoppingCart;
+
+                await _shoppingCartItemService.UpdateShoppingCartItemAsync(shoppingCartItem);
+
+                TempData["successMessage"] = "Item moved to cart successfully!";
+            }
+
+            return RedirectToAction("Wishlist");
+        }
+        
         #endregion
     }
 
