@@ -37,7 +37,7 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <a class="nav-link text-dark" asp-controller="ShoppingCart" asp-action="List">
-                                Shopping Cart @await Component.InvokeAsync("CartItemCount")
+                                Shopping cart @await Component.InvokeAsync("CartItemCount")
                             </a>
                             <span class="text-success font-weight-bold p-2">@User.Identity.Name.ToUpper()</span>
                             <a class="btn btn-sm btn-danger font-weight-bold ms-2" asp-action="LogOut" asp-controller="Account">SignOut</a>

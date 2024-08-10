@@ -3,6 +3,7 @@
     public enum OrderStatus
     {
         Pending = 10,
+
         Completed = 20,
     }
 }

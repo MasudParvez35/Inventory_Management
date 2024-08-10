@@ -94,7 +94,6 @@ namespace OA_WEB.Controllers
             return RedirectToAction("List");
         }
 
-
         [HttpPost]
         public async Task<IActionResult> RemoveFromCart(int id)
         {
@@ -108,17 +107,6 @@ namespace OA_WEB.Controllers
             }
 
             return RedirectToAction("List");
-        }
-
-        public async Task<int> GetCartItemCountAsync()
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (int.TryParse(userIdClaim, out int userId))
-            {
-                var items = await _shoppingCartItemService.GetShoppingCartItemsByUserIdAsync(userId);
-                return items.Count();
-            }
-            return 0;
         }
     }
 

@@ -7,12 +7,22 @@ namespace OA_WEB.Factories
 {
     public class OrderModelFactory : IOrderModelFactory
     {
-        private readonly IOrderService _orderService;
+        #region Fields
+
+        protected readonly IOrderService _orderService;
+
+        #endregion
+
+        #region Ctor
 
         public OrderModelFactory(IOrderService orderService)
         {
             _orderService = orderService;
         }
+
+        #endregion
+
+        #region Methods
 
         public async Task<IList<OrderModel>> PrepareOrderListModelAsync(IEnumerable<Order> orders)
         {
@@ -44,7 +54,8 @@ namespace OA_WEB.Factories
                         OrderStatusId = order.OrderStatusId,
                         MobileNumber = order.MobileNumber,
                         TransactionId = order.TransactionId,
-                        Address = order.Address
+                        Address = order.Address,
+                        TotalAmount = order.TotalAmount,
                     };
                 }
 
@@ -61,17 +72,11 @@ namespace OA_WEB.Factories
                         Text = x.ToString(),
                         Value = ((int)x).ToString()
                     }).ToList();
-
-                /*model.AvailableOrderStatus = Enum.GetValues(typeof(OrderStatus))
-                    .Cast<OrderStatus>()
-                    .Select(x => new SelectListItem
-                    {
-                        Text = x.ToString(),
-                        Value = ((int)x).ToString()
-                    }).ToList();*/
             }
 
             return model;
         }
+
+        #endregion
     }
 }

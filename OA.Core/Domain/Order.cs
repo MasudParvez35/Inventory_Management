@@ -11,8 +11,10 @@ namespace OA.Core.Domain
         public string Address { get; set; }
         public int PaymentTypeId { get; set; }
         public int OrderStatusId { get; set; }
+        public decimal TotalAmount { get; set; }
 
-        // Navigation property
+        #region Navigation property
+
         public User User { get; set; }
 
         // Enum properties for convenience
@@ -29,5 +31,7 @@ namespace OA.Core.Domain
             get => (OrderStatus)OrderStatusId;
             set => OrderStatusId = (int)value;
         }
+
+        #endregion
     }
 }

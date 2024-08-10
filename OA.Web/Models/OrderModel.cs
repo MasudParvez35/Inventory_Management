@@ -6,10 +6,14 @@ namespace OA_WEB.Models
 {
     public class OrderModel : BaseEntity
     {
+        #region Ctor
+
         public OrderModel()
         {
             AvailablePaymentType = [];
         }
+
+        #endregion
 
         public int UserId { get; set; }
         public int PaymentTypeId { get; set; }
@@ -17,6 +21,7 @@ namespace OA_WEB.Models
         public string MobileNumber { get; set; }
         public string TransactionId { get; set; }
         public string Address { get; set; }
+        public decimal TotalAmount { get; set; }
 
         #region Custom Properties
 

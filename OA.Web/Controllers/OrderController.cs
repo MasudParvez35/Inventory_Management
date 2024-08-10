@@ -11,18 +11,24 @@ namespace OA_WEB.Controllers
     {
         #region Fields
 
-        protected readonly IOrderModelFactory _orderModelFactory;
         protected readonly IOrderService _orderService;
+        protected readonly IProductService _productService;
+        protected readonly IOrderModelFactory _orderModelFactory;
+        protected readonly IShoppingCartItemService _shoppingCartItemService;
 
         #endregion
 
         #region Ctor
 
-        public OrderController(IOrderModelFactory orderModelFactory, 
-            IOrderService orderService)
+        public OrderController(IOrderModelFactory orderModelFactory,
+            IShoppingCartItemService shoppingCartItemService,
+            IOrderService orderService,
+            IProductService productService)
         {
-            _orderModelFactory = orderModelFactory;
             _orderService = orderService;
+            _productService = productService;
+            _orderModelFactory = orderModelFactory;
+            _shoppingCartItemService = shoppingCartItemService;
         }
 
         #endregion
@@ -37,7 +43,6 @@ namespace OA_WEB.Controllers
             return View(model);
         }
 
-        [HttpGet]
         public async Task<IActionResult> Create()
         {
             var model = await _orderModelFactory.PrepareOrderModelAsync(new OrderModel(), null);
@@ -51,6 +56,16 @@ namespace OA_WEB.Controllers
                 }
             }
 
+            var cartItems = await _shoppingCartItemService.GetShoppingCartItemsByUserIdAsync(model.UserId);
+            decimal totalAmount = 0;
+            foreach (var item in cartItems)
+            {
+                var porduct = await _productService.GetProductByIdAsync(item.ProductId);
+                totalAmount += porduct.SellingPrice * item.Quantity;
+            }
+
+            model.TotalAmount = totalAmount;
+
             return View(model);
         }
 
@@ -61,15 +76,22 @@ namespace OA_WEB.Controllers
             {
                 var order = new Order
                 {
-                    UserId = model.UserId, 
+                    UserId = model.UserId,
                     PaymentTypeId = model.PaymentTypeId,
                     OrderStatusId = model.OrderStatusId,
                     MobileNumber = model.MobileNumber,
                     TransactionId = model.TransactionId,
-                    Address = model.Address
+                    Address = model.Address,
+                    TotalAmount = model.TotalAmount
                 };
 
                 await _orderService.InsertOrderAsync(order);
+
+                var CartItems = await _shoppingCartItemService.GetShoppingCartItemsByUserIdAsync(model.UserId);
+                foreach (var item in CartItems)
+                {
+                    await _shoppingCartItemService.DeleteShoppingCartItemAsync(item);
+                }
 
                 return RedirectToAction("List", "Order");
             }
@@ -77,6 +99,19 @@ namespace OA_WEB.Controllers
             model = await _orderModelFactory.PrepareOrderModelAsync(model, null);
 
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Capture(int id)
+        {
+            var order = await _orderService.GetOrderByIdAsync(id);
+            if (order != null)
+            {
+                order.OrderStatusId = 20; 
+                await _orderService.UpdateOrderAsync(order); 
+            }
+
+            return RedirectToAction("List");
         }
 
         [HttpPost]
