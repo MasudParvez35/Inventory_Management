@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OA.Core.Domain;
 using OA.Services;
 using System.Security.Claims;
 
 namespace OA_WEB.Component
 {
-    public class CartItemCountViewComponent : ViewComponent
+    public class WishlistItemCount : ViewComponent
     {
         #region Fields
 
@@ -15,7 +14,7 @@ namespace OA_WEB.Component
 
         #region Ctor
 
-        public CartItemCountViewComponent(IShoppingCartItemService shoppingCartItemService)
+        public WishlistItemCount(IShoppingCartItemService shoppingCartItemService)
         {
             _shoppingCartItemService = shoppingCartItemService;
         }
@@ -30,7 +29,7 @@ namespace OA_WEB.Component
 
             if (int.TryParse(userIdClaim, out int userId))
             {
-                var items = await _shoppingCartItemService.GetAllCartItemAsync(userId);
+                var items = await _shoppingCartItemService.GetAllWishlistItemAsync(userId);
                 var count = 0;
                 foreach (var item in items)
                 {
@@ -40,7 +39,7 @@ namespace OA_WEB.Component
                 return View(count);
             }
 
-            return View(0); 
+            return View(0);
         }
 
         #endregion

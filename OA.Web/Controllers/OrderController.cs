@@ -56,7 +56,7 @@ namespace OA_WEB.Controllers
                 }
             }
 
-            var cartItems = await _shoppingCartItemService.GetShoppingCartItemsByUserIdAsync(model.UserId);
+            var cartItems = await _shoppingCartItemService.GetAllShoppingCartByUserIdAsync(model.UserId);
             decimal totalAmount = 0;
             foreach (var item in cartItems)
             {
@@ -87,7 +87,7 @@ namespace OA_WEB.Controllers
 
                 await _orderService.InsertOrderAsync(order);
 
-                var CartItems = await _shoppingCartItemService.GetShoppingCartItemsByUserIdAsync(model.UserId);
+                var CartItems = await _shoppingCartItemService.GetAllShoppingCartByUserIdAsync(model.UserId);
                 foreach (var item in CartItems)
                 {
                     await _shoppingCartItemService.DeleteShoppingCartItemAsync(item);

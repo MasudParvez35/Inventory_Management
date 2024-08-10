@@ -1,0 +1,71 @@
+﻿@model IList<ShoppingCartItemModel>
+
+@{
+    ViewData["Title"] = "Wish List";
+    decimal totalPrice = 0;
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">Wish List</h2>
+    @if (!Model.Any())
+    {
+        <p class="text-center">Your Wishlist is empty.</p>
+
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <div>
+                <a class="btn btn-primary" asp-action="List" asp-controller="Product">Continue Shopping</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr style="background:darkorchid;">
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    totalPrice += (item.Price * item.Quantity);
+                    <tr>
+                        <td>
+                            <img src="@item.ProductImage" alt="@item.ProductName" style="height: 50px; width:50px;" />
+                        </td>
+                        <td>@item.ProductName</td>
+                        <td>@item.Price.ToString("C")</td>
+                        <td>
+                            <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control mx-auto" style="width: 80px;" form="update-form-@item.Id" />
+                        </td>
+                        <td>
+                            <form asp-action="AddToCart" asp-controller="ShoppingCart" method="post" style="display:inline;">
+                                <input type="hidden" name="ProductId" value="@item.ProductId" />
+                                <input type="hidden" name="Quantity" value="@item.Quantity" />
+                                <button type="submit" class="btn btn-primary btn-sm">Add to cart</button>
+                            </form>
+                            <form id="update-form-@item.Id" asp-action="UpdateWishlistItem" asp-controller="ShoppingCart" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-warning btn-sm">Update</button>
+                            </form>
+
+                            <form asp-action="RemoveFromWishlist" asp-controller="ShoppingCart" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <div>
+                <a class="btn btn-primary" asp-action="List" asp-controller="Product">Continue Shopping</a>
+            </div>
+        </div>
+    }
+</div>
