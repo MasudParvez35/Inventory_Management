@@ -36,6 +36,8 @@
                     <div class="d-flex align-items-center">
                         @if (User.Identity.IsAuthenticated)
                         {
+                            <a class="nav-link text-dark" asp-controller="Order" asp-action="Myorder">Myorder</a>
+                            @* <a class="mx-2 btn btn-sm btn-danger font-weight-bold" asp-action="Myorder" asp-controller="Order">Myorder</a> *@
                             <a class="nav-link text-dark" asp-controller="ShoppingCart" asp-action="WishList">
                                 Wishlist @await Component.InvokeAsync("WishlistItemCount")
                             </a>

@@ -43,6 +43,20 @@ namespace OA_WEB.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Myorder()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (int.TryParse(userIdClaim, out int userId))
+            {
+                var orders = await _orderService.GetOrdersByUserIdAsync(userId);
+                var model = await _orderModelFactory.PrepareOrderListModelAsync(orders);
+                return View(model); 
+            }
+
+            return RedirectToAction("List");
+        }
+
         public async Task<IActionResult> Create()
         {
             var model = await _orderModelFactory.PrepareOrderModelAsync(new OrderModel(), null);

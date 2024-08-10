@@ -9,5 +9,6 @@ namespace OA.Services
         Task DeleteOrderAsync(Order order);
         Task<Order> GetOrderByIdAsync(int id);
         Task <IEnumerable<Order>> GetAllOrderAsync();
+        Task<IEnumerable<Order>> GetOrdersByUserIdAsync(int userId);
     }
 }
