@@ -43,6 +43,20 @@ namespace OA_WEB.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Myorder()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (int.TryParse(userIdClaim, out int userId))
+            {
+                var orders = await _orderService.GetOrdersByUserIdAsync(userId);
+                var model = await _orderModelFactory.PrepareOrderListModelAsync(orders);
+                return View(model); 
+            }
+
+            return RedirectToAction("List");
+        }
+
         public async Task<IActionResult> Create()
         {
             var model = await _orderModelFactory.PrepareOrderModelAsync(new OrderModel(), null);
@@ -56,7 +70,7 @@ namespace OA_WEB.Controllers
                 }
             }
 
-            var cartItems = await _shoppingCartItemService.GetShoppingCartItemsByUserIdAsync(model.UserId);
+            var cartItems = await _shoppingCartItemService.GetAllShoppingCartByUserIdAsync(model.UserId);
             decimal totalAmount = 0;
             foreach (var item in cartItems)
             {
@@ -87,7 +101,7 @@ namespace OA_WEB.Controllers
 
                 await _orderService.InsertOrderAsync(order);
 
-                var CartItems = await _shoppingCartItemService.GetShoppingCartItemsByUserIdAsync(model.UserId);
+                var CartItems = await _shoppingCartItemService.GetAllShoppingCartByUserIdAsync(model.UserId);
                 foreach (var item in CartItems)
                 {
                     await _shoppingCartItemService.DeleteShoppingCartItemAsync(item);

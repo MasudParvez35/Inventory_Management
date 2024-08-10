@@ -18,6 +18,24 @@ namespace OA.Services
             await _shoppingCartRepository.DeleteAsync(shoppingCartItem);
         }
 
+        public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllCartItemAsync(int userId)
+        {
+            Expression<Func<ShoppingCartItem, bool>> predicate = item => item.UserId == userId;
+            predicate = item => item.ShoppingCartTypeId == (int)ShoppingCartType.ShoppingCart;
+
+            // Use the repository to find items by the predicate
+            return await _shoppingCartRepository.FindByAsync(predicate);
+        }
+
+        public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllWishlistItemAsync(int userId)
+        {
+            Expression<Func<ShoppingCartItem, bool>> predicate = item => item.UserId == userId;
+            predicate = item => item.ShoppingCartTypeId == (int)ShoppingCartType.Wishlist;
+
+            // Use the repository to find items by the predicate
+            return await _shoppingCartRepository.FindByAsync(predicate);
+        }
+
         public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllItems()
         {
             return await _shoppingCartRepository.GetAllAsync();
@@ -28,7 +46,7 @@ namespace OA.Services
             return await _shoppingCartRepository.GetByIdAsync(shoppingCartItemId);
         }
 
-        public virtual async Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItemsByUserIdAsync(int userId)
+        public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllShoppingCartByUserIdAsync(int userId)
         {
             // Define the predicate to filter by userId
             Expression<Func<ShoppingCartItem, bool>> predicate = item => item.UserId == userId;

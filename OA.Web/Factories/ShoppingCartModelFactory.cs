@@ -37,7 +37,8 @@ namespace OA_WEB.Factories
                         Id = shoppingCartItem.Id,
                         UserId = shoppingCartItem.UserId,
                         ProductId = shoppingCartItem.ProductId,
-                        Quantity = shoppingCartItem.Quantity
+                        Quantity = shoppingCartItem.Quantity,
+                        ShoppingCartTypeId = shoppingCartItem.ShoppingCartTypeId,
                     };
 
                     // Fetch additional product details
@@ -45,7 +46,7 @@ namespace OA_WEB.Factories
                     if (product != null)
                     {
                         model.ProductName = product.Name;
-                        model.ProductImage = product.ImagePath; // Assuming ImagePath is a property in Product
+                        model.ProductImage = product.ImagePath;
                         model.Price = product.SellingPrice;
                     }
                 }

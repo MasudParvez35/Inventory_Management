@@ -21,9 +21,6 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="List">Category List</a>
                         </li>
                         <li class="nav-item">
@@ -36,7 +33,12 @@
                     <div class="d-flex align-items-center">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <a class="nav-link text-dark" asp-controller="ShoppingCart" asp-action="List">
+                            <a class="nav-link text-dark" asp-controller="Order" asp-action="Myorder">Myorder</a>
+                            @* <a class="mx-2 btn btn-sm btn-danger font-weight-bold" asp-action="Myorder" asp-controller="Order">Myorder</a> *@
+                            <a class="nav-link text-dark" asp-controller="ShoppingCart" asp-action="WishList">
+                                Wishlist @await Component.InvokeAsync("WishlistItemCount")
+                            </a>
+                            <a class="nav-link text-dark" asp-controller="ShoppingCart" asp-action="CartList">
                                 Shopping cart @await Component.InvokeAsync("CartItemCount")
                             </a>
                             <span class="text-success font-weight-bold p-2">@User.Identity.Name.ToUpper()</span>
