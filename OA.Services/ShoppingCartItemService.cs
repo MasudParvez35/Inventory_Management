@@ -18,23 +18,24 @@ namespace OA.Services
             await _shoppingCartRepository.DeleteAsync(shoppingCartItem);
         }
 
-        public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllCartItemAsync(int userId)
+        public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllCartItemByUserIdAsync(int userId)
         {
-            Expression<Func<ShoppingCartItem, bool>> predicate = item => item.UserId == userId;
-            predicate = item => item.ShoppingCartTypeId == (int)ShoppingCartType.ShoppingCart;
+            Expression<Func<ShoppingCartItem, bool>> predicate = item =>
+                item.UserId == userId && item.ShoppingCartTypeId == (int)ShoppingCartType.ShoppingCart;
 
             // Use the repository to find items by the predicate
             return await _shoppingCartRepository.FindByAsync(predicate);
         }
 
-        public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllWishlistItemAsync(int userId)
+        public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllWishlistItemByUserIdAsync(int userId)
         {
-            Expression<Func<ShoppingCartItem, bool>> predicate = item => item.UserId == userId;
-            predicate = item => item.ShoppingCartTypeId == (int)ShoppingCartType.Wishlist;
+            Expression<Func<ShoppingCartItem, bool>> predicate = item =>
+                item.UserId == userId && item.ShoppingCartTypeId == (int)ShoppingCartType.Wishlist;
 
             // Use the repository to find items by the predicate
             return await _shoppingCartRepository.FindByAsync(predicate);
         }
+
 
         public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllItems()
         {

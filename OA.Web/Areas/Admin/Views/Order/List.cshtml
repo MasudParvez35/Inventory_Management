@@ -9,9 +9,9 @@
 <table class="table table-bordered table-striped text-center">
     <thead>
         <tr>
+            <th>Order ID</th>
             <th>User Id</th>
             <th>User Name</th>
-            <th>Order ID</th>
             <th>Payment Type</th>
             <th>Order Status</th>
             <th>Mobile Number</th>
@@ -27,9 +27,9 @@
             foreach (var order in Model)
             {
                 <tr>
+                    <td>@order.Id</td>
                     <td>@order.UserId</td>
                     <td>@order.UserName</td>
-                    <td>@order.Id</td>
                     <td>@order.PaymentTypeStr</td>
                     <td>
                         <span class="font-monospace"

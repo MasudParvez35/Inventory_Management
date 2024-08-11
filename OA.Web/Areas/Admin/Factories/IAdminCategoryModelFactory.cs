@@ -1,9 +1,9 @@
 ﻿using OA.Core.Domain;
 using OA_WEB.Areas.Admin.Models;
 
-namespace OA_WEB.Factories
+namespace OA_WEB.Areas.Admin.Factories
 {
-    public interface ICategoryModelFactory
+    public interface IAdminCategoryModelFactory
     {
         Task<IList<CategoryModel>> PrepareCategoryListModelAsync(IEnumerable<Category> categories);
 

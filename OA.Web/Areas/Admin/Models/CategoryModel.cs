@@ -1,6 +1,6 @@
 ﻿using OA.Core;
 
-namespace OA_WEB.Models
+namespace OA_WEB.Areas.Admin.Models
 {
     public class CategoryModel : BaseEntity
     {

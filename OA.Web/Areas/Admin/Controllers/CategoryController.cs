@@ -2,24 +2,25 @@
 using Microsoft.AspNetCore.Mvc;
 using OA.Core.Domain;
 using OA.Services;
-using OA_WEB.Factories;
-using OA_WEB.Models;
+using OA_WEB.Areas.Admin.Factories;
+using OA_WEB.Areas.Admin.Models;
 
-namespace OA_WEB.Controllers
+namespace OA_WEB.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         #region Fields
 
         private readonly ICategoryService _categoryService;
-        private readonly ICategoryModelFactory _categoryModelFactory;
+        private readonly IAdminCategoryModelFactory _categoryModelFactory;
 
         #endregion
 
         #region Ctor
 
         public CategoryController(ICategoryService categoryService, 
-            ICategoryModelFactory categoryModelFactory)
+            IAdminCategoryModelFactory categoryModelFactory)
         {
             _categoryService = categoryService;
             _categoryModelFactory = categoryModelFactory;
