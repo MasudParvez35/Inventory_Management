@@ -35,14 +35,6 @@ namespace OA_WEB.Controllers
 
         #region Methods
 
-        public async Task<IActionResult> List()
-        {
-            var orders = await _orderService.GetAllOrderAsync();
-            var model = await _orderModelFactory.PrepareOrderListModelAsync(orders);
-
-            return View(model);
-        }
-
         public async Task<IActionResult> Myorder()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -54,7 +46,7 @@ namespace OA_WEB.Controllers
                 return View(model); 
             }
 
-            return RedirectToAction("List");
+            return RedirectToAction("MyOrder");
         }
 
         public async Task<IActionResult> Create()
@@ -107,37 +99,12 @@ namespace OA_WEB.Controllers
                     await _shoppingCartItemService.DeleteShoppingCartItemAsync(item);
                 }
 
-                return RedirectToAction("List", "Order");
+                return RedirectToAction("MyOrder", "Order");
             }
 
             model = await _orderModelFactory.PrepareOrderModelAsync(model, null);
 
             return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Capture(int id)
-        {
-            var order = await _orderService.GetOrderByIdAsync(id);
-            if (order != null)
-            {
-                order.OrderStatusId = 20; 
-                await _orderService.UpdateOrderAsync(order); 
-            }
-
-            return RedirectToAction("List");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var order = await _orderService.GetOrderByIdAsync(id);
-            if (order == null)
-                return RedirectToAction("List");
-
-            await _orderService.DeleteOrderAsync(order);
-
-            return RedirectToAction("List");
         }
 
         #endregion
