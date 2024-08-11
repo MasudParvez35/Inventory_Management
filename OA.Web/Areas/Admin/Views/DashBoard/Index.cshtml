@@ -1,0 +1,48 @@
+﻿@model DashboardViewModel
+
+<h2 class="text-center my-4">Dashboard Overview</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <a href="@Url.Action("List", "User", new { area = "Admin" })" class="text-decoration-none">
+                <div class="card text-center shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Users</h5>
+                        <p class="display-4 text-danger">@Model.TotalUsers</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="@Url.Action("List", "Category", new { area = "Admin" })" class="text-decoration-none">
+                <div class="card text-center shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Categories</h5>
+                        <p class="display-4 text-success">@Model.TotalCategories</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="@Url.Action("List", "Product", new { area = "Admin" })" class="text-decoration-none">
+                <div class="card text-center shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Items</h5>
+                        <p class="display-4 text-info">@Model.TotalProducts</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="@Url.Action("List", "Order", new { area = "Admin" })" class="text-decoration-none">
+                <div class="card text-center shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Orders</h5>
+                        <p class="display-4 text-warning">@Model.TotalOrders</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

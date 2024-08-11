@@ -1,40 +1,58 @@
-﻿using OA.Core.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using OA.Core.Domain;
 using OA.Data;
 
 namespace OA.Services
 {
     public class ProductService : IProductService
     {
+        #region Fields
+
         private readonly IRepository<Product> _productsRepository;
+
+        #endregion
+
+        #region Ctor
 
         public ProductService(IRepository<Product> productsRepository)
         {
             _productsRepository = productsRepository;
         }
 
-        public async Task InsertProductAsync(Product product)
+        #endregion
+
+        #region Methods
+
+        public virtual async Task InsertProductAsync(Product product)
         {
             await _productsRepository.InsertAsync(product);
         }
 
-        public async Task UpdateProductAsync(Product product)
+        public virtual async Task UpdateProductAsync(Product product)
         {
             await _productsRepository.UpdateAsync(product);
         }
 
-        public async Task DeleteProductAsync(Product product)
+        public virtual async Task DeleteProductAsync(Product product)
         {
             await _productsRepository.DeleteAsync(product);
         }
 
-        public async Task<Product> GetProductByIdAsync(int productId)
+        public virtual async Task<Product> GetProductByIdAsync(int productId)
         {
             return await _productsRepository.GetByIdAsync(productId);
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductAsync()
+        public virtual async Task<IEnumerable<Product>> GetAllProductAsync()
         {
             return await _productsRepository.GetAllAsync();
         }
+
+        public virtual async Task<int> GetTotalProductAsync()
+        {
+            return await _productsRepository.Table.CountAsync();
+        }
+
+        #endregion
     }
 }

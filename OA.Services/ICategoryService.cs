@@ -8,5 +8,6 @@ namespace OA.Services
         Task DeleteCategoryAsync(Category category);
         Task<Category> GetCategoryByIdAsync(int categoryId);
         Task<IEnumerable<Category>> GetAllCategory();
+        Task<int> GetTotalCategoriesAsync();
     }
 }

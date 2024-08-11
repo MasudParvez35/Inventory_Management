@@ -1,0 +1,31 @@
+﻿@model IEnumerable<UserModel>
+
+<h2 class="text-center my-4">User List</h2>
+
+<div class="container">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td>@user.Mobile</td>
+                        <td>@user.Address</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

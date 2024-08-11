@@ -27,6 +27,7 @@ builder.Services.AddScoped<IAdminProductModelFactory, AdminProductModelFactory>(
 
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAccountModelFactory, AccountModelFactory>();
+builder.Services.AddScoped<IUserModelFactory, UserModelFactory>();
 
 builder.Services.AddScoped<IShoppingCartItemService, ShoppingCartItemService>();
 builder.Services.AddScoped<IShoppingCartModelFactory, ShoppingCartModelFactory>();
@@ -73,7 +74,7 @@ app.UseEndpoints(endpoints =>
     // Route for Admin area
     endpoints.MapControllerRoute(
         name: "admin",
-        pattern: "{area:exists}/{controller=Product}/{action=List}/{id?}"
+        pattern: "{area:exists}/{controller=DashBoard}/{action=Index}/{id?}"
     );
 
     // Default route

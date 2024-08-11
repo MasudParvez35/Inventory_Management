@@ -39,6 +39,16 @@ namespace OA.Services
             return await _userRepository.GetByIdAsync(userId);
         }
 
+        public virtual async Task<int> GetTotalUsersAsync()
+        {
+            return await _userRepository.Table.CountAsync();
+        }
+
+        public virtual async Task<IEnumerable<User>> GetAllUsersAsync()
+        {
+            return await _userRepository.GetAllAsync();
+        }
+
         #endregion
     }
 }
