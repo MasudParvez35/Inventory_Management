@@ -31,6 +31,18 @@ namespace OA_WEB.Controllers
 
         #region Methods
 
+        /*[AcceptVerbs("Get", "Post")]
+        public async Task<IActionResult> UserNameIsExist(string userName)
+        {
+            var user = _accountService.GetUserByUsernameAsync(userName);
+            if (user != null)
+            {
+                return Json($"Username {userName} is already taken.");
+            }
+            return Json(true);
+        }*/
+
+
         public async Task<IActionResult> GetCurrentUser()
         {
             // Check if the user is authenticated
