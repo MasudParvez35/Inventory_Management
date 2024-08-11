@@ -18,7 +18,7 @@ namespace OA.Services
             await _shoppingCartRepository.DeleteAsync(shoppingCartItem);
         }
 
-        public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllCartItemAsync(int userId)
+        public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllCartItemByUserIdAsync(int userId)
         {
             Expression<Func<ShoppingCartItem, bool>> predicate = item =>
                 item.UserId == userId && item.ShoppingCartTypeId == (int)ShoppingCartType.ShoppingCart;
@@ -27,7 +27,7 @@ namespace OA.Services
             return await _shoppingCartRepository.FindByAsync(predicate);
         }
 
-        public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllWishlistItemAsync(int userId)
+        public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllWishlistItemByUserIdAsync(int userId)
         {
             Expression<Func<ShoppingCartItem, bool>> predicate = item =>
                 item.UserId == userId && item.ShoppingCartTypeId == (int)ShoppingCartType.Wishlist;

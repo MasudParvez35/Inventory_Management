@@ -29,7 +29,7 @@ namespace OA_WEB.Component
 
             if (int.TryParse(userIdClaim, out int userId))
             {
-                var items = await _shoppingCartItemService.GetAllWishlistItemAsync(userId);
+                var items = await _shoppingCartItemService.GetAllWishlistItemByUserIdAsync(userId);
                 var count = 0;
                 foreach (var item in items)
                 {

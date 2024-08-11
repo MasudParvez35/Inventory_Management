@@ -38,7 +38,7 @@ namespace OA_WEB.Controllers
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (int.TryParse(userIdClaim, out int userId))
                 {
-                    var shoppingCartItems = await _shoppingCartItemService.GetAllCartItemAsync(userId);
+                    var shoppingCartItems = await _shoppingCartItemService.GetAllCartItemByUserIdAsync(userId);
                     var model = await _shoppingCartItemModelFactory.PrepareShoppingCartItemListModelAsync(shoppingCartItems);
 
                     return View(model);
@@ -57,22 +57,34 @@ namespace OA_WEB.Controllers
 
                 if (int.TryParse(userIdClaim, out int userId))
                 {
-                    var cart = new ShoppingCartItem()
+                    // Check if the item already exists in the user's cart
+                    var existingCartItem = (await _shoppingCartItemService.GetAllCartItemByUserIdAsync(userId))
+                                            .FirstOrDefault(item => item.ProductId == productId && item.ShoppingCartTypeId == (int)ShoppingCartType.ShoppingCart);
+
+                    if (existingCartItem != null)
                     {
-                        UserId = userId,
-                        ProductId = productId,
-                        Quantity = quantity,
-                        ShoppingCartTypeId = (int)ShoppingCartType.ShoppingCart,
-                    };
+                        existingCartItem.Quantity += quantity;
+                        await _shoppingCartItemService.UpdateShoppingCartItemAsync(existingCartItem);
+                    }
+                    else
+                    {
+                        var cart = new ShoppingCartItem()
+                        {
+                            UserId = userId,
+                            ProductId = productId,
+                            Quantity = quantity,
+                            ShoppingCartTypeId = (int)ShoppingCartType.ShoppingCart,
+                        };
 
-                    await _shoppingCartItemService.InsertShoppingCartItemAsync(cart);
-                    TempData["successMessage"] = "Item added to cart successfully!";
+                        await _shoppingCartItemService.InsertShoppingCartItemAsync(cart);
+                        TempData["successMessage"] = "Item added to cart successfully!";
+                    }
 
-                    return RedirectToAction("Wishlist");
+                    return RedirectToAction("CartList");
                 }
             }
 
-            return RedirectToAction("Wishlist");
+            return RedirectToAction("CartList");
         }
 
 
@@ -122,7 +134,7 @@ namespace OA_WEB.Controllers
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (int.TryParse(userIdClaim, out int userId))
                 {
-                    var wiahlistItems = await _shoppingCartItemService.GetAllWishlistItemAsync(userId);
+                    var wiahlistItems = await _shoppingCartItemService.GetAllWishlistItemByUserIdAsync(userId);
                     var model = await _shoppingCartItemModelFactory.PrepareShoppingCartItemListModelAsync(wiahlistItems);
 
                     return View(model);
@@ -141,16 +153,29 @@ namespace OA_WEB.Controllers
 
                 if (int.TryParse(userIdClaim, out int userId))
                 {
-                    var cart = new ShoppingCartItem()
-                    {
-                        UserId = userId,
-                        ProductId = model.ProductId,
-                        Quantity = model.Quantity,
-                        ShoppingCartTypeId = (int)ShoppingCartType.Wishlist,
-                    };
+                    var existingWishlistItem = (await _shoppingCartItemService.GetAllWishlistItemByUserIdAsync(userId))
+                                       .FirstOrDefault(item => item.ProductId == model.ProductId && item.ShoppingCartTypeId == (int)ShoppingCartType.Wishlist);
 
-                    await _shoppingCartItemService.InsertShoppingCartItemAsync(cart);
+                    if (existingWishlistItem != null)
+                    {
+                        // Update the quantity of the existing item
+                        existingWishlistItem.Quantity += model.Quantity;
+                        await _shoppingCartItemService.UpdateShoppingCartItemAsync(existingWishlistItem);
+                        TempData["successMessage"] = "Wishlist item quantity updated successfully!";
+                    }
+                    else
+                    { 
+                        var wishList = new ShoppingCartItem()
+                        {
+                            UserId = userId,
+                            ProductId = model.ProductId,
+                            Quantity = model.Quantity,
+                            ShoppingCartTypeId = (int)ShoppingCartType.Wishlist,
+                        };
+
+                    await _shoppingCartItemService.InsertShoppingCartItemAsync(wishList);
                     TempData["successMessage"] = "Item added to cart successfully!";
+                }
 
                     return RedirectToAction("Wishlist");
                 }
