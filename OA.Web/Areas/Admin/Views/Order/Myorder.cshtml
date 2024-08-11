@@ -1,0 +1,53 @@
+﻿@model List<OrderModel>
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-bordered table-striped text-center">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>User Id</th>
+            <th>User Name</th>
+            <th>Payment Type</th>
+            <th>Order Status</th>
+            <th>Mobile Number</th>
+            <th>TransactionId</th>
+            <th>Address</th>
+            <th>Total Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.UserId</td>
+                    <td>@order.UserName</td>
+                    <td>@order.PaymentTypeStr</td>
+                    <td>
+                        <span class="font-monospace"
+                              style="color: @(order.OrderStatusId == 10 ? "red" : (order.OrderStatusId == 20 ? "green" : "black"));">
+                            @order.OrderStatusStr
+                        </span>
+                    </td>
+                    <td>@order.MobileNumber</td>
+                    <td>@order.TransactionId</td>
+                    <td>@order.Address</td>
+                    <td>@order.TotalAmount.ToString("C")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="10">No orders found.</td>
+            </tr>
+        }
+    </tbody>
+</table>

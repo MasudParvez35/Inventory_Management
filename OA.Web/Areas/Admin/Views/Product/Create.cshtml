@@ -1,0 +1,23 @@
+﻿@model ProductModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create Product</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6 offset-3">
+            <form method="post" asp-controller="Product" asp-action="Create" enctype="multipart/form-data">
+
+                <partial name="_CreateOrUpdate"></partial> 
+
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Create" />
+                    <a class="btn btn-primary" asp-action="List" asp-controller="Product">Back to List</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
