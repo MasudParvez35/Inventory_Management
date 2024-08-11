@@ -1,5 +1,5 @@
 ﻿using OA.Core.Domain;
-using OA_WEB.Models;
+using OA_WEB.Areas.Admin.Models;
 
 namespace OA_WEB.Factories
 {
