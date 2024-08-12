@@ -31,17 +31,16 @@ namespace OA_WEB.Controllers
 
         #region Methods
 
-        /*[AcceptVerbs("Get", "Post")]
+        [AcceptVerbs("Get", "Post")]
         public async Task<IActionResult> UserNameIsExist(string userName)
         {
-            var user = _accountService.GetUserByUsernameAsync(userName);
+            var user = await _accountService.GetUserByUsernameAsync(userName);
             if (user != null)
             {
                 return Json($"Username {userName} is already taken.");
             }
             return Json(true);
-        }*/
-
+        }
 
         public async Task<IActionResult> GetCurrentUser()
         {
@@ -142,12 +141,14 @@ namespace OA_WEB.Controllers
 
                 await _accountService.InsertUserAsync(data);
                 TempData["successMessage"] = "You are eligible to login, Please fill own credential's then login!";
+                
                 return RedirectToAction("Login");
             }
             else
             {
                 TempData["errorMessage"] = "Empty form can't be submitted!";
                 model = await _accountModelFactory.PrepareSignUpModelAsync(model, null);
+                
                 return View(model);
             }
         }

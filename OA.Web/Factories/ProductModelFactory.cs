@@ -7,12 +7,22 @@ namespace OA_WEB.Factories
 {
     public class ProductModelFactory : IProductModelFactory
     {
+        #region Fields
+
         private readonly ICategoryService _categoryService;
+
+        #endregion
+
+        #region Ctor
 
         public ProductModelFactory(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
+
+        #endregion
+
+        #region Methods
 
         public async Task<IList<ProductModel>> PrepareProductListModelAsync(IEnumerable<Product> products)
         {
@@ -42,7 +52,7 @@ namespace OA_WEB.Factories
                         Quantity = product.Quantity,
                     };
                 }
-                else
+                /*else
                 {
                     model.Id = product.Id;
                     model.Name = product.Name;
@@ -52,7 +62,7 @@ namespace OA_WEB.Factories
                     model.BuyingPrice = product.BuyingPrice;
                     model.SellingPrice = product.SellingPrice;
                     model.Quantity = product.Quantity;
-                }
+                }*/
 
                 var productCategory = await _categoryService.GetCategoryByIdAsync(product.CategoryId);
                 model.CategoryName = productCategory?.Name;
@@ -70,5 +80,7 @@ namespace OA_WEB.Factories
 
             return model;
         }
+
+        #endregion
     }
 }
