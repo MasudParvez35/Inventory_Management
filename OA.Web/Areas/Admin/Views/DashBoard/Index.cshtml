@@ -44,5 +44,15 @@
                 </div>
             </a>
         </div>
+        <div class="col-md-3">
+            <a href="@Url.Action("List", "Order", new { area = "Admin" })" class="text-decoration-none">
+                <div class="card text-center shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Sells</h5>
+                        <p class="display-4 text-success">@Model.TotalSell</p>
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
 </div>
