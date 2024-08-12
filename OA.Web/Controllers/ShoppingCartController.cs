@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OA.Core.Domain;
 using OA.Services;
 using OA_WEB.Factories;
@@ -48,6 +49,7 @@ namespace OA_WEB.Controllers
             return RedirectToAction("CartList");
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddToCart(int productId, int quantity)
         {
@@ -144,6 +146,7 @@ namespace OA_WEB.Controllers
             return RedirectToAction("Wishlist");
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddToWishlist(ShoppingCartItemModel model)
         {

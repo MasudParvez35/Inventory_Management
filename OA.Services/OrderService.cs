@@ -1,4 +1,5 @@
-﻿using OA.Core.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using OA.Core.Domain;
 using OA.Data;
 
 namespace OA.Services
@@ -50,6 +51,11 @@ namespace OA.Services
         public virtual async Task UpdateOrderAsync(Order order)
         {
             await _orderRepository.UpdateAsync(order);
+        }
+
+        public virtual async Task<int> GetTotalOrdersAsync()
+        {
+            return await _orderRepository.Table.CountAsync();
         }
 
         #endregion

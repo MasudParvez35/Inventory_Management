@@ -10,5 +10,6 @@ namespace OA.Services
         Task<Order> GetOrderByIdAsync(int id);
         Task <IEnumerable<Order>> GetAllOrderAsync();
         Task<IEnumerable<Order>> GetOrdersByUserIdAsync(int userId);
+        Task<int> GetTotalOrdersAsync();
     }
 }

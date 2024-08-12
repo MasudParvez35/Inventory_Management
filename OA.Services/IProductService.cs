@@ -9,5 +9,6 @@ namespace OA.Services
         Task DeleteProductAsync(Product product);
         Task<Product> GetProductByIdAsync(int productId);
         Task<IEnumerable<Product>> GetAllProductAsync();
+        Task<int> GetTotalProductAsync();
     }
 }

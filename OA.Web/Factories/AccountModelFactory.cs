@@ -1,6 +1,5 @@
 ﻿using OA.Core.Domain;
 using OA_WEB.Models;
-using System.Threading.Tasks;
 
 namespace OA_WEB.Factories
 {
