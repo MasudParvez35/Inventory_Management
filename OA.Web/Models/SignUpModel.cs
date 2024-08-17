@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using OA.Core;
+﻿using OA.Core;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace OA_WEB.Models
@@ -28,8 +26,10 @@ namespace OA_WEB.Models
         [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; }
 
-
+        [Required(ErrorMessage = "Please select state")]
         public int StateId { get; set; }
+
+        [Required(ErrorMessage = "Please select city")]
         public int CityId { get; set; }
     }
 }

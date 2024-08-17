@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using OA.Core;
+﻿using OA.Core;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace OA_WEB.Models
 {

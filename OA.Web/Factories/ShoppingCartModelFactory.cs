@@ -1,19 +1,19 @@
-﻿using OA.Core.Domain;
-using OA.Services;
+﻿using OA.Services;
 using OA_WEB.Models;
+using OA.Core.Domain;
 
 namespace OA_WEB.Factories
 {
     public class ShoppingCartModelFactory : IShoppingCartModelFactory
     {
-        protected readonly IShoppingCartItemService _shoppingCartItemService;
         protected readonly IProductService _productService;
+        protected readonly IShoppingCartItemService _shoppingCartItemService;
 
         public ShoppingCartModelFactory(IShoppingCartItemService shoppingCartItemService, 
             IProductService productService)
         {
-            _shoppingCartItemService = shoppingCartItemService;
             _productService = productService;
+            _shoppingCartItemService = shoppingCartItemService;
         }
 
         public async Task<IList<ShoppingCartItemModel>> PrepareShoppingCartItemListModelAsync(IEnumerable<ShoppingCartItem> shoppingCartItems)

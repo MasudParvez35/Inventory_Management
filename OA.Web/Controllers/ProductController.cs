@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OA.Core.Domain;
-using OA.Services;
+﻿using OA.Services;
 using OA_WEB.Factories;
-using OA_WEB.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace OA_WEB.Controllers
 {
@@ -12,18 +10,15 @@ namespace OA_WEB.Controllers
 
         private readonly IProductService _productService;
         private readonly IProductModelFactory _productModelFactory;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
         #endregion
 
         #region Ctor
 
         public ProductController(
-            IWebHostEnvironment webHostEnvironment, 
             IProductService productService, 
             IProductModelFactory productModelFactory)
         {
-            _webHostEnvironment = webHostEnvironment;
             _productService = productService;
             _productModelFactory = productModelFactory;
         }
