@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OA.Services;
+﻿using OA.Services;
+using Microsoft.AspNetCore.Mvc;
 using OA_WEB.Areas.Admin.Factories;
 
 namespace OA_WEB.Areas.Admin.Controllers
@@ -13,7 +13,6 @@ namespace OA_WEB.Areas.Admin.Controllers
         protected readonly IUserModelFactory _userModelFactory;
 
         #endregion
-
 
         #region Ctor
         public UserController(IAccountService accountService, 

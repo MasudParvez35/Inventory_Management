@@ -226,20 +226,44 @@ namespace OA_WEB.Controllers
 
         public async Task<IActionResult> MoveToCart(int id)
         {
-            var shoppingCartItem = await _shoppingCartItemService.GetShoppingCartItemByIdAsync(id);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (shoppingCartItem != null)
+            if (int.TryParse(userIdClaim, out int userId))
             {
-                shoppingCartItem.ShoppingCartTypeId = (int)ShoppingCartType.ShoppingCart;
+                var wishlistItem = await _shoppingCartItemService.GetShoppingCartItemByIdAsync(id);
 
-                await _shoppingCartItemService.UpdateShoppingCartItemAsync(shoppingCartItem);
+                if (wishlistItem != null && wishlistItem.UserId == userId)
+                {
+                    // Check if the item already exists in the shopping cart
+                    var existingCartItem = (await _shoppingCartItemService.GetAllCartItemByUserIdAsync(userId))
+                                            .FirstOrDefault(item => item.ProductId == wishlistItem.ProductId && item.ShoppingCartTypeId == (int)ShoppingCartType.ShoppingCart);
 
-                TempData["successMessage"] = "Item moved to cart successfully!";
+                    if (existingCartItem != null)
+                    {
+                        // Increase quantity of existing cart item
+                        existingCartItem.Quantity += wishlistItem.Quantity;
+                        await _shoppingCartItemService.UpdateShoppingCartItemAsync(existingCartItem);
+                    }
+                    else
+                    {
+                        var newCartItem = new ShoppingCartItem
+                        {
+                            UserId = userId,
+                            ProductId = wishlistItem.ProductId,
+                            Quantity = wishlistItem.Quantity,
+                            ShoppingCartTypeId = (int)ShoppingCartType.ShoppingCart
+                        };
+
+                        await _shoppingCartItemService.InsertShoppingCartItemAsync(newCartItem);
+                    }
+
+                    await _shoppingCartItemService.DeleteShoppingCartItemAsync(wishlistItem);
+                }
             }
 
             return RedirectToAction("Wishlist");
         }
-        
+
         #endregion
     }
 

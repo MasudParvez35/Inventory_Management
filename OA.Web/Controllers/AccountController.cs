@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using OA.Services;
-using OA.Core.Domain;
+﻿using OA.Services;
 using OA_WEB.Models;
-using System.Security.Claims;
+using OA.Core.Domain;
 using OA_WEB.Factories;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace OA_WEB.Controllers
 {
@@ -13,6 +13,8 @@ namespace OA_WEB.Controllers
     {
         #region Fields
 
+        protected readonly ICityService _cityService;
+        protected readonly IStateService _stateService;
         protected readonly IAccountService _accountService;
         protected readonly IAccountModelFactory _accountModelFactory;
 
@@ -20,9 +22,13 @@ namespace OA_WEB.Controllers
 
         #region Ctor
 
-        public AccountController(IAccountService accountService, 
-            IAccountModelFactory accountModelFactory)
+        public AccountController(IAccountService accountService,
+            IAccountModelFactory accountModelFactory,
+            ICityService cityService,
+            IStateService stateService)
         {
+            _cityService = cityService;
+            _stateService = stateService;
             _accountService = accountService;
             _accountModelFactory = accountModelFactory;
         }
@@ -30,6 +36,8 @@ namespace OA_WEB.Controllers
         #endregion
 
         #region Methods
+
+        #region User
 
         [AcceptVerbs("Get", "Post")]
         public async Task<IActionResult> UserNameIsExist(string userName)
@@ -44,28 +52,22 @@ namespace OA_WEB.Controllers
 
         public async Task<IActionResult> GetCurrentUser()
         {
-            // Check if the user is authenticated
             if (User.Identity.IsAuthenticated)
             {
-                // Retrieve the username and user ID from the claims
                 var username = User.FindFirst(ClaimTypes.Name)?.Value;
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-                // Convert the user ID to an integer
                 if (int.TryParse(userIdClaim, out int userId))
                 {
-                    // Use the username and user ID as needed, e.g., return it in a view or JSON
                     return Json(new { Username = username, UserId = userId });
                 }
                 else
                 {
-                    // Handle the case where the user ID is not valid
                     return BadRequest("User ID is invalid.");
                 }
             }
             else
             {
-                // User is not authenticated
                 return Unauthorized("User is not logged in.");
             }
         }
@@ -136,7 +138,8 @@ namespace OA_WEB.Controllers
                     Email = model.Email,
                     Password = model.Password,
                     Mobile = model.Mobile,
-                    Address = model.Address
+                    StateId = model.StateId,
+                    CityId = model.CityId,
                 };
 
                 await _accountService.InsertUserAsync(data);
@@ -146,7 +149,6 @@ namespace OA_WEB.Controllers
             }
             else
             {
-                TempData["errorMessage"] = "Empty form can't be submitted!";
                 model = await _accountModelFactory.PrepareSignUpModelAsync(model, null);
                 
                 return View(model);
@@ -164,6 +166,26 @@ namespace OA_WEB.Controllers
 
             return RedirectToAction("Login");
         }
+
+        #endregion
+
+        #region State-city
+
+        public async Task<IActionResult> GetStates()
+        {
+            var states = await _stateService.GetAllStatesAsync();
+
+            return new JsonResult(states);
+        }
+
+        public async Task<IActionResult> GetCities(int stateId)
+        {
+            var cities = await _cityService.GetCitiesByStateIdAsync(stateId);
+
+            return new JsonResult(cities);
+        }
+
+        #endregion
 
         #endregion
     }

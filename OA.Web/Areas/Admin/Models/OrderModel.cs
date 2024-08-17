@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OA.Core;
+using OA.Core.Domain;
 
 namespace OA_WEB.Areas.Admin.Models
 {
@@ -33,6 +34,7 @@ namespace OA_WEB.Areas.Admin.Models
 
         [ValidateNever]
         public string OrderStatusStr { get; set; }
+        [ValidateNever]
 
         public List<SelectListItem> AvailablePaymentType { get; set; }
 

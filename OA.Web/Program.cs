@@ -36,6 +36,9 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderModelFactory, OrderModelFactory>();
 builder.Services.AddScoped<IAdminOrderModelFactory, AdminOrderModelFactory>();
 
+builder.Services.AddScoped<IStateService, StateService>();
+builder.Services.AddScoped<ICityService, CityService>();
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(option =>
     {
@@ -82,7 +85,5 @@ app.UseEndpoints(endpoints =>
         name: "default",
         pattern: "{controller=Product}/{action=List}/{id?}");
 });
-
-
 
 app.Run();

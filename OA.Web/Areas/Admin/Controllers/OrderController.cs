@@ -123,7 +123,7 @@ namespace OA_WEB.Areas.Admin.Controllers
             var order = await _orderService.GetOrderByIdAsync(id);
             if (order != null)
             {
-                order.OrderStatusId = 20; 
+                order.OrderStatusId = (int)OrderStatus.Completed; 
                 await _orderService.UpdateOrderAsync(order); 
             }
 

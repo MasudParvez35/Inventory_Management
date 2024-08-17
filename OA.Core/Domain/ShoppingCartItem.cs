@@ -5,13 +5,13 @@ namespace OA.Core.Domain
     public class ShoppingCartItem : BaseEntity
     {
         public int UserId { get; set; }
-        [ForeignKey("UserId")]
 
         public int ProductId { get; set; }
-        [ForeignKey("ProductId")]
 
         public int Quantity { get; set; }
         public int ShoppingCartTypeId { get; set; }
+
+        #region Navigation Properties
 
         [NotMapped]
         public ShoppingCartType ShoppingCartType
@@ -19,7 +19,13 @@ namespace OA.Core.Domain
             get => (ShoppingCartType)ShoppingCartTypeId;
             set => ShoppingCartTypeId = (int)value;
         }
+
+        [ForeignKey("UserId")]
         public User User { get; set; }
+
+        [ForeignKey("ProductId")]
         public Product Product { get; set; }
+
+        #endregion
     }
 }

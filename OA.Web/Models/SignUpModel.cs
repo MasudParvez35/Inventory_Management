@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using OA.Core;
 using System.ComponentModel.DataAnnotations;
 
@@ -26,6 +28,8 @@ namespace OA_WEB.Models
         [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; }
 
-        public string Address { get; set; }
+
+        public int StateId { get; set; }
+        public int CityId { get; set; }
     }
 }

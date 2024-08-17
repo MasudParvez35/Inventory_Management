@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OA.Core.Domain;
+using System.Net;
 
 namespace OA.Data
 {
@@ -18,6 +19,18 @@ namespace OA.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>()
+                .HasOne(p => p.State)
+                .WithMany()
+                .HasForeignKey(p => p.StateId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<User>()
+                .HasOne(p => p.City)
+                .WithMany()
+                .HasForeignKey(p => p.CityId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Configuring the relationship between Category and Product
             modelBuilder.Entity<Category>()

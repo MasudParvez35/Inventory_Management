@@ -8,14 +8,20 @@ namespace OA_WEB.Areas.Admin.Factories
     {
         #region Fields
 
+        protected readonly ICityService _cityService;
+        protected readonly IStateService _stateService;
         protected readonly IAccountService _accountService;
 
         #endregion
 
         #region Ctor
 
-        public UserModelFactory(IAccountService accountService)
+        public UserModelFactory(IAccountService accountService,
+            IStateService stateService,
+            ICityService cityService)
         {
+            _cityService = cityService;
+            _stateService = stateService;
             _accountService = accountService;
         }
 
@@ -45,9 +51,16 @@ namespace OA_WEB.Areas.Admin.Factories
                         UserName = user.Name,
                         Email = user.Email,
                         Mobile = user.Mobile,
-                        Address = user.Address
+                        StateId = user.StateId,
+                        CityId = user.CityId
                     };
                 }
+
+                var state = await _stateService.GetStateByIdAsync(user.StateId);
+                var city = await _cityService.GetCityByIdAsync(user.CityId);
+
+                model.StateName = state.Name;
+                model.CityName = city.Name;
             }
 
             return model;
