@@ -5,7 +5,6 @@ namespace OA.Core.Domain
     public class Order : BaseEntity
     {
         public int UserId { get; set; }
-        [ForeignKey("UserId")]
         public string MobileNumber { get; set; }
         public string TransactionId { get; set; }
         public string Address { get; set; }
@@ -15,6 +14,7 @@ namespace OA.Core.Domain
 
         #region Navigation property
 
+        [ForeignKey("UserId")]
         public User User { get; set; }
 
         // Enum properties for convenience

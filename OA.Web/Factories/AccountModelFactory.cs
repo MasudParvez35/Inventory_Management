@@ -1,10 +1,21 @@
-﻿using OA.Core.Domain;
+﻿using OA.Services;
 using OA_WEB.Models;
+using OA.Core.Domain;
 
 namespace OA_WEB.Factories
 {
     public class AccountModelFactory : IAccountModelFactory
     {
+        protected readonly ICityService _cityService;
+        protected readonly IStateService _stateService;
+
+        public AccountModelFactory(ICityService cityService, 
+            IStateService stateService)
+        {
+            _cityService = cityService;
+            _stateService = stateService;
+        }
+
         public async Task<LoginModel> PrepareLoginModelModelAsync(LoginModel model, User user, bool excludeProperties = false)
         {
             if (user != null)
@@ -35,16 +46,9 @@ namespace OA_WEB.Factories
                         Email = user.Email,
                         Password = user.Password,
                         Mobile = user.Mobile,
-                        Address = user.Address
+                        StateId = user.StateId,
+                        CityId = user.CityId
                     };
-                }
-                else
-                {
-                    model.UserName = user.Name;
-                    model.Email = user.Email;
-                    model.Password = user.Password;
-                    model.Mobile = user.Mobile;
-                    model.Address = user.Address;
                 }
             }
 
