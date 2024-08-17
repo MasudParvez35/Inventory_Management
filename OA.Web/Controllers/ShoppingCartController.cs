@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using OA.Core.Domain;
-using OA.Services;
-using OA_WEB.Factories;
+﻿using OA.Services;
 using OA_WEB.Models;
+using OA.Core.Domain;
+using OA_WEB.Factories;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OA_WEB.Controllers
 {
@@ -79,7 +79,6 @@ namespace OA_WEB.Controllers
                         };
 
                         await _shoppingCartItemService.InsertShoppingCartItemAsync(cart);
-                        TempData["successMessage"] = "Item added to cart successfully!";
                     }
 
                     return RedirectToAction("CartList");

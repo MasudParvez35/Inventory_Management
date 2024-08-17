@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using OA.Core.Domain;
-using OA.Services;
+﻿using OA.Services;
 using OA_WEB.Models;
+using OA.Core.Domain;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace OA_WEB.Factories
 {
@@ -47,22 +47,10 @@ namespace OA_WEB.Factories
                         Description = product.Description,
                         ImagePath = product.ImagePath,
                         CategoryId = product.CategoryId,
-                        BuyingPrice = product.BuyingPrice,
-                        SellingPrice = product.SellingPrice,
+                        Price = product.BuyingPrice,
                         Quantity = product.Quantity,
                     };
                 }
-                /*else
-                {
-                    model.Id = product.Id;
-                    model.Name = product.Name;
-                    model.Description = product.Description;
-                    model.ImagePath = product.ImagePath;
-                    model.CategoryId = product.CategoryId;
-                    model.BuyingPrice = product.BuyingPrice;
-                    model.SellingPrice = product.SellingPrice;
-                    model.Quantity = product.Quantity;
-                }*/
 
                 var productCategory = await _categoryService.GetCategoryByIdAsync(product.CategoryId);
                 model.CategoryName = productCategory?.Name;
