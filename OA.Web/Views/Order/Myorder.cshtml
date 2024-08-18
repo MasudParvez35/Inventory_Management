@@ -32,7 +32,10 @@
                     </td>
                     <td>@order.MobileNumber</td>
                     <td>@order.TransactionId</td>
-                    <td>@order.Address</td>
+                    <td>
+                        @order.StateName,
+                        @order.CityName
+                    </td>
                     <td>@order.TotalAmount.ToString("C")</td>
                 </tr>
             }

@@ -39,7 +39,10 @@
                     </td>
                     <td>@order.MobileNumber</td>
                     <td>@order.TransactionId</td>
-                    <td>@order.Address</td>
+                    <td>
+                        @order.StateName,
+                        @order.CityName
+                    </td>
                     <td>@order.TotalAmount.ToString("C")</td>
                     <td>
                         <form asp-action="Capture" asp-route-id="@order.Id" method="post" style="display:inline;">

@@ -87,7 +87,8 @@ namespace OA_WEB.Controllers
                     OrderStatusId = model.OrderStatusId,
                     MobileNumber = model.MobileNumber,
                     TransactionId = model.TransactionId,
-                    Address = model.Address,
+                    StateId = model.StateId,
+                    CityId = model.CityId,
                     TotalAmount = model.TotalAmount
                 };
 
