@@ -22,9 +22,18 @@ namespace OA_WEB.Areas.Admin.Models
         public string MobileNumber { get; set; }
         public string TransactionId { get; set; }
         public string Address { get; set; }
+        public int StateId { get; set; }
+        public int CityId { get; set; }
         public decimal TotalAmount { get; set; }
 
+
         #region Custom Properties
+
+        [ValidateNever]
+        public string StateName { get; set; }
+
+        [ValidateNever]
+        public string CityName { get; set; }
 
         [ValidateNever]
         public string UserName { get; set; }

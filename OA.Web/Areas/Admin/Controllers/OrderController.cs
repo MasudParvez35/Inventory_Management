@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using OA.Services;
 using OA.Core.Domain;
-using OA.Services;
-using OA_WEB.Areas.Admin.Factories;
-using OA_WEB.Areas.Admin.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using OA_WEB.Areas.Admin.Models;
+using OA_WEB.Areas.Admin.Factories;
 
 namespace OA_WEB.Areas.Admin.Controllers
 {
@@ -97,7 +97,8 @@ namespace OA_WEB.Areas.Admin.Controllers
                     OrderStatusId = model.OrderStatusId,
                     MobileNumber = model.MobileNumber,
                     TransactionId = model.TransactionId,
-                    Address = model.Address,
+                    StateId = model.StateId,
+                    CityId = model.CityId,
                     TotalAmount = model.TotalAmount
                 };
 

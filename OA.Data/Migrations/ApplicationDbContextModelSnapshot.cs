@@ -57,7 +57,7 @@ namespace OA.Data.Migrations
 
                     b.HasIndex("StateId");
 
-                    b.ToTable("City");
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.Order", b =>
@@ -68,9 +68,8 @@ namespace OA.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
 
                     b.Property<string>("MobileNumber")
                         .IsRequired()
@@ -80,6 +79,9 @@ namespace OA.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("PaymentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StateId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalAmount")
@@ -93,6 +95,10 @@ namespace OA.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("StateId");
 
                     b.HasIndex("UserId");
 
@@ -180,7 +186,7 @@ namespace OA.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("State");
+                    b.ToTable("States");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.User", b =>
@@ -235,11 +241,27 @@ namespace OA.Data.Migrations
 
             modelBuilder.Entity("OA.Core.Domain.Order", b =>
                 {
+                    b.HasOne("OA.Core.Domain.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OA.Core.Domain.State", "State")
+                        .WithMany()
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("OA.Core.Domain.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("City");
+
+                    b.Navigation("State");
 
                     b.Navigation("User");
                 });

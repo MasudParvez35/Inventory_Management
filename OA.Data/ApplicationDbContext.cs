@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OA.Core.Domain;
-using System.Net;
+﻿using OA.Core.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace OA.Data
 {
@@ -10,11 +9,13 @@ namespace OA.Data
         {
         }
 
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; } // Corrected naming
-        public DbSet<Order> Orders { get; set; } // Added Orders DbSet
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Order> Orders { get; set; } 
+        public DbSet<State> States { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -56,7 +57,18 @@ namespace OA.Data
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId);
 
-            // Optional: Configure the enums to be stored as integers
+            modelBuilder.Entity<Order>()
+                .HasOne(p => p.State)
+                .WithMany()
+                .HasForeignKey(p => p.StateId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(p => p.City)
+                .WithMany()
+                .HasForeignKey(p => p.CityId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Order>()
                 .Property(o => o.PaymentTypeId)
                 .HasConversion<int>();
