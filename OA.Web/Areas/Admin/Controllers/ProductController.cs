@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using OA.Services;
 using OA.Core.Domain;
-using OA.Services;
-using OA_WEB.Areas.Admin.Factories;
+using Microsoft.AspNetCore.Mvc;
 using OA_WEB.Areas.Admin.Models;
+using OA_WEB.Areas.Admin.Factories;
 
 namespace OA_WEB.Areas.Admin.Controllers
 {
@@ -12,20 +12,20 @@ namespace OA_WEB.Areas.Admin.Controllers
         #region Fields
 
         private readonly IProductService _productService;
-        private readonly IAdminProductModelFactory _productModelFactory;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IAdminProductModelFactory _productModelFactory;
 
         #endregion
 
         #region Ctor
 
         public ProductController(
-            IWebHostEnvironment webHostEnvironment, 
             IProductService productService, 
+            IWebHostEnvironment webHostEnvironment, 
             IAdminProductModelFactory productModelFactory)
         {
-            _webHostEnvironment = webHostEnvironment;
             _productService = productService;
+            _webHostEnvironment = webHostEnvironment;
             _productModelFactory = productModelFactory;
         }
 
