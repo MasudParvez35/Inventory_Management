@@ -39,7 +39,7 @@ namespace OA_WEB.Controllers
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (int.TryParse(userIdClaim, out int userId))
                 {
-                    var shoppingCartItems = await _shoppingCartItemService.GetAllCartItemByUserIdAsync(userId);
+                    var shoppingCartItems = await _shoppingCartItemService.GetAllCartItemsAsync(userId, (int)ShoppingCartType.ShoppingCart);
                     var model = await _shoppingCartItemModelFactory.PrepareShoppingCartItemListModelAsync(shoppingCartItems);
 
                     return View(model);
@@ -59,9 +59,7 @@ namespace OA_WEB.Controllers
 
                 if (int.TryParse(userIdClaim, out int userId))
                 {
-                    // Check if the item already exists in the user's cart
-                    var existingCartItem = (await _shoppingCartItemService.GetAllCartItemByUserIdAsync(userId))
-                                            .FirstOrDefault(item => item.ProductId == productId && item.ShoppingCartTypeId == (int)ShoppingCartType.ShoppingCart);
+                    var existingCartItem = (await _shoppingCartItemService.GetAllCartItemsAsync(userId, (int)ShoppingCartType.ShoppingCart, productId)).FirstOrDefault();
 
                     if (existingCartItem != null)
                     {
@@ -135,8 +133,8 @@ namespace OA_WEB.Controllers
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (int.TryParse(userIdClaim, out int userId))
                 {
-                    var wiahlistItems = await _shoppingCartItemService.GetAllWishlistItemByUserIdAsync(userId);
-                    var model = await _shoppingCartItemModelFactory.PrepareShoppingCartItemListModelAsync(wiahlistItems);
+                    var wishlistItems = await _shoppingCartItemService.GetAllCartItemsAsync(userId, (int)ShoppingCartType.Wishlist);
+                    var model = await _shoppingCartItemModelFactory.PrepareShoppingCartItemListModelAsync(wishlistItems);
 
                     return View(model);
                 }
@@ -155,12 +153,10 @@ namespace OA_WEB.Controllers
 
                 if (int.TryParse(userIdClaim, out int userId))
                 {
-                    var existingWishlistItem = (await _shoppingCartItemService.GetAllWishlistItemByUserIdAsync(userId))
-                                       .FirstOrDefault(item => item.ProductId == model.ProductId && item.ShoppingCartTypeId == (int)ShoppingCartType.Wishlist);
+                    var existingWishlistItem = (await _shoppingCartItemService.GetAllCartItemsAsync(userId, (int)ShoppingCartType.Wishlist, model.ProductId)).FirstOrDefault();
 
                     if (existingWishlistItem != null)
                     {
-                        // Update the quantity of the existing item
                         existingWishlistItem.Quantity += model.Quantity;
                         await _shoppingCartItemService.UpdateShoppingCartItemAsync(existingWishlistItem);
                         TempData["successMessage"] = "Wishlist item quantity updated successfully!";
@@ -233,9 +229,7 @@ namespace OA_WEB.Controllers
 
                 if (wishlistItem != null && wishlistItem.UserId == userId)
                 {
-                    // Check if the item already exists in the shopping cart
-                    var existingCartItem = (await _shoppingCartItemService.GetAllCartItemByUserIdAsync(userId))
-                                            .FirstOrDefault(item => item.ProductId == wishlistItem.ProductId && item.ShoppingCartTypeId == (int)ShoppingCartType.ShoppingCart);
+                    var existingCartItem = (await _shoppingCartItemService.GetAllCartItemsAsync(userId, (int)ShoppingCartType.ShoppingCart, wishlistItem.ProductId)).FirstOrDefault();
 
                     if (existingCartItem != null)
                     {

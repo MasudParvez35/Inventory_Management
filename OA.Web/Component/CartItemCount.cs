@@ -3,46 +3,45 @@ using OA.Core.Domain;
 using OA.Services;
 using System.Security.Claims;
 
-namespace OA_WEB.Component
+namespace OA_WEB.Component;
+
+public class CartItemCountViewComponent : ViewComponent
 {
-    public class CartItemCountViewComponent : ViewComponent
+    #region Fields
+
+    private readonly IShoppingCartItemService _shoppingCartItemService;
+
+    #endregion
+
+    #region Ctor
+
+    public CartItemCountViewComponent(IShoppingCartItemService shoppingCartItemService)
     {
-        #region Fields
+        _shoppingCartItemService = shoppingCartItemService;
+    }
 
-        private readonly IShoppingCartItemService _shoppingCartItemService;
+    #endregion
 
-        #endregion
+    #region Methods
 
-        #region Ctor
+    public async Task<IViewComponentResult> InvokeAsync()
+    {
+        var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        public CartItemCountViewComponent(IShoppingCartItemService shoppingCartItemService)
+        if (int.TryParse(userIdClaim, out int userId))
         {
-            _shoppingCartItemService = shoppingCartItemService;
-        }
-
-        #endregion
-
-        #region Methods
-
-        public async Task<IViewComponentResult> InvokeAsync()
-        {
-            var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (int.TryParse(userIdClaim, out int userId))
+            var items = await _shoppingCartItemService.GetAllCartItemsAsync(userId, (int)ShoppingCartType.ShoppingCart);
+            var count = 0;
+            foreach (var item in items)
             {
-                var items = await _shoppingCartItemService.GetAllCartItemByUserIdAsync(userId);
-                var count = 0;
-                foreach (var item in items)
-                {
-                    count += item.Quantity;
-                }
-
-                return View(count);
+                count += item.Quantity;
             }
 
-            return View(0); 
+            return View(count);
         }
 
-        #endregion
+        return View(0); 
     }
+
+    #endregion
 }

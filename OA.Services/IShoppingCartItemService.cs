@@ -1,16 +1,16 @@
 ﻿using OA.Core.Domain;
 
-namespace OA.Services
+namespace OA.Services;
+
+public interface IShoppingCartItemService
 {
-    public interface IShoppingCartItemService
-    {
-        Task<ShoppingCartItem> GetShoppingCartItemByIdAsync(int shoppingCartItemId);
-        Task InsertShoppingCartItemAsync(ShoppingCartItem shoppingCartItem);
-        Task UpdateShoppingCartItemAsync(ShoppingCartItem shoppingCartItem);
-        Task DeleteShoppingCartItemAsync(ShoppingCartItem shoppingCartItem);
-        Task<IEnumerable<ShoppingCartItem>> GetAllItems();
-        Task<IEnumerable<ShoppingCartItem>> GetAllShoppingCartByUserIdAsync(int userId);
-        Task<IEnumerable<ShoppingCartItem>> GetAllCartItemByUserIdAsync(int userId);
-        Task<IEnumerable<ShoppingCartItem>> GetAllWishlistItemByUserIdAsync(int userId);
-    }
+    Task<ShoppingCartItem> GetShoppingCartItemByIdAsync(int shoppingCartItemId);
+
+    Task InsertShoppingCartItemAsync(ShoppingCartItem shoppingCartItem);
+
+    Task UpdateShoppingCartItemAsync(ShoppingCartItem shoppingCartItem);
+
+    Task DeleteShoppingCartItemAsync(ShoppingCartItem shoppingCartItem);
+
+    Task<IEnumerable<ShoppingCartItem>> GetAllCartItemsAsync(int userId = 0, int cartId = 0, int productId = 0);
 }
