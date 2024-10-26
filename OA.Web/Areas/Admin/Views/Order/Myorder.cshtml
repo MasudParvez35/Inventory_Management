@@ -9,8 +9,6 @@
 <table class="table table-bordered table-striped text-center">
     <thead>
         <tr>
-            <th>Order ID</th>
-            <th>User Id</th>
             <th>User Name</th>
             <th>Payment Type</th>
             <th>Order Status</th>
@@ -26,8 +24,6 @@
             foreach (var order in Model)
             {
                 <tr>
-                    <td>@order.Id</td>
-                    <td>@order.UserId</td>
                     <td>@order.UserName</td>
                     <td>@order.PaymentTypeStr</td>
                     <td>
@@ -38,7 +34,10 @@
                     </td>
                     <td>@order.MobileNumber</td>
                     <td>@order.TransactionId</td>
-                    <td>@order.StateName</td>
+                    <td>
+                        @order.StateName,
+                        @order.CityName
+                    </td>
                     <td>@order.TotalAmount.ToString("C")</td>
                 </tr>
             }

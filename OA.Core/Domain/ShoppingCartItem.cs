@@ -9,9 +9,7 @@ namespace OA.Core.Domain
         public int Quantity { get; set; }
         public int ShoppingCartTypeId { get; set; }
 
-
         #region Navigation Properties
-
 
         [ForeignKey("UserId")]
         public User User { get; set; }

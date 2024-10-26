@@ -1,69 +1,48 @@
-﻿using OA.Core.Domain;
-using OA.Data;
-using System.Linq.Expressions;
+﻿using OA.Data;
+using OA.Core.Domain;
+using Microsoft.EntityFrameworkCore;
 
-namespace OA.Services
+namespace OA.Services;
+
+public class ShoppingCartItemService : IShoppingCartItemService
 {
-    public class ShoppingCartItemService : IShoppingCartItemService
+    protected readonly IRepository<ShoppingCartItem> _shoppingCartRepository;
+
+    public ShoppingCartItemService(IRepository<ShoppingCartItem> shoppingCartRepository)
     {
-        protected readonly IRepository<ShoppingCartItem> _shoppingCartRepository;
-
-        public ShoppingCartItemService(IRepository<ShoppingCartItem> shoppingCartRepository)
-        {
-            _shoppingCartRepository = shoppingCartRepository;
-        }
-
-        public virtual async Task DeleteShoppingCartItemAsync(ShoppingCartItem shoppingCartItem)
-        {
-            await _shoppingCartRepository.DeleteAsync(shoppingCartItem);
-        }
-
-        public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllCartItemByUserIdAsync(int userId)
-        {
-            Expression<Func<ShoppingCartItem, bool>> predicate = item =>
-                item.UserId == userId && item.ShoppingCartTypeId == (int)ShoppingCartType.ShoppingCart;
-
-            // Use the repository to find items by the predicate
-            return await _shoppingCartRepository.FindByAsync(predicate);
-        }
-
-        public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllWishlistItemByUserIdAsync(int userId)
-        {
-            Expression<Func<ShoppingCartItem, bool>> predicate = item =>
-                item.UserId == userId && item.ShoppingCartTypeId == (int)ShoppingCartType.Wishlist;
-
-            // Use the repository to find items by the predicate
-            return await _shoppingCartRepository.FindByAsync(predicate);
-        }
-
-
-        public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllItems()
-        {
-            return await _shoppingCartRepository.GetAllAsync();
-        }
-
-        public virtual async Task<ShoppingCartItem> GetShoppingCartItemByIdAsync(int shoppingCartItemId)
-        {
-            return await _shoppingCartRepository.GetByIdAsync(shoppingCartItemId);
-        }
-
-        public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllShoppingCartByUserIdAsync(int userId)
-        {
-            // Define the predicate to filter by userId
-            Expression<Func<ShoppingCartItem, bool>> predicate = item => item.UserId == userId;
-
-            // Use the repository to find items by the predicate
-            return await _shoppingCartRepository.FindByAsync(predicate);
-        }
-
-        public virtual async Task InsertShoppingCartItemAsync(ShoppingCartItem shoppingCartItem)
-        {
-            await _shoppingCartRepository.InsertAsync(shoppingCartItem);
-        }
-
-        public virtual async Task UpdateShoppingCartItemAsync(ShoppingCartItem shoppingCartItem)
-        {
-            await _shoppingCartRepository.UpdateAsync(shoppingCartItem);
-        }
+        _shoppingCartRepository = shoppingCartRepository;
     }
+
+    #region Methods
+
+    public virtual async Task DeleteShoppingCartItemAsync(ShoppingCartItem shoppingCartItem)
+    {
+        await _shoppingCartRepository.DeleteAsync(shoppingCartItem);
+    }
+
+    public virtual async Task<IEnumerable<ShoppingCartItem>> GetAllCartItemsAsync(int userId = 0, int cartId = 0, int productId = 0)
+    {
+        return await _shoppingCartRepository.Table
+            .Where(x => (userId == 0 || x.UserId == userId) && 
+                    (cartId == 0 || x.ShoppingCartTypeId == cartId) &&
+                    (productId == 0 || x.ProductId == productId))
+            .ToListAsync();
+    }
+
+    public virtual async Task<ShoppingCartItem> GetShoppingCartItemByIdAsync(int shoppingCartItemId)
+    {
+        return await _shoppingCartRepository.GetByIdAsync(shoppingCartItemId);
+    }
+
+    public virtual async Task InsertShoppingCartItemAsync(ShoppingCartItem shoppingCartItem)
+    {
+        await _shoppingCartRepository.InsertAsync(shoppingCartItem);
+    }
+
+    public virtual async Task UpdateShoppingCartItemAsync(ShoppingCartItem shoppingCartItem)
+    {
+        await _shoppingCartRepository.UpdateAsync(shoppingCartItem);
+    }
+
+    #endregion
 }
