@@ -40,6 +40,13 @@ namespace OA_WEB.Areas.Admin.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> CategoryProduct(int categoryId = 0)
+        {
+            var model = await _productModelFactory.PrepareProductListModelAsync(categoryId);
+
+            return View(model);
+        }
+
         public async Task<IActionResult> Details(int id)
         {
             var product = await _productService.GetProductByIdAsync(id);

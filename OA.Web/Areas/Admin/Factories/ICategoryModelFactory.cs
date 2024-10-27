@@ -1,12 +1,11 @@
 ﻿using OA.Core.Domain;
 using OA_WEB.Areas.Admin.Models;
 
-namespace OA_WEB.Areas.Admin.Factories
-{
-    public interface ICategoryModelFactory
-    {
-        Task<IList<CategoryModel>> PrepareCategoryListModelAsync(IEnumerable<Category> categories);
+namespace OA_WEB.Areas.Admin.Factories;
 
-        Task<CategoryModel> PrepareCategoryModelAsync(CategoryModel model, Category category, bool excludeProperties = false);
-    }
+public interface ICategoryModelFactory
+{
+    Task<IList<CategoryModel>> PrepareCategoryListModelAsync(IEnumerable<Category> categories);
+
+    Task<CategoryModel> PrepareCategoryModelAsync(CategoryModel model, Category category, bool excludeProperties = false);
 }

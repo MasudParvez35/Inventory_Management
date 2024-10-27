@@ -10,6 +10,8 @@ public class ProductListModel : BaseEntity
         Products = [];
     }
 
+    public string CategoryName { get; set; }
+
     public IList<SelectListItem> AvailableCategories { get; set; }
 
     public IList<ProductModel> Products { get; set; }

@@ -30,6 +30,8 @@ public class AdminProductModelFactory : IAdminProductModelFactory
     public async Task<ProductListModel> PrepareProductListModelAsync(int categoryId)
     {
         var model = new ProductListModel();
+        if (categoryId > 0) 
+            model.CategoryName = (await _categoryService.GetCategoryByIdAsync(categoryId)).Name;
 
         var allCategories = await _categoryService.GetAllCategory();
         model.AvailableCategories = allCategories.Select(category => new SelectListItem
