@@ -3,84 +3,84 @@ using OA.Core.Domain;
 using OA_WEB.Areas.Admin.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace OA_WEB.Areas.Admin.Factories
+namespace OA_WEB.Areas.Admin.Factories;
+
+public class AdminProductModelFactory : IAdminProductModelFactory
 {
-    public class AdminProductModelFactory : IAdminProductModelFactory
+    #region Fields
+
+    private readonly ICategoryService _categoryService;
+    private readonly IProductService _productService;
+
+    #endregion
+
+    #region Ctor
+
+    public AdminProductModelFactory(ICategoryService categoryService, 
+        IProductService productService)
     {
-        #region Fields
-
-        private readonly ICategoryService _categoryService;
-
-        #endregion
-
-        #region Ctor
-
-        public AdminProductModelFactory(ICategoryService categoryService)
-        {
-            _categoryService = categoryService;
-        }
-
-        #endregion
-
-        #region Methods
-
-        public async Task<IList<ProductModel>> PrepareProductListModelAsync(IEnumerable<Product> products)
-        {
-            var model = new List<ProductModel>();
-
-            foreach (var product in products)
-                model.Add(await PrepareProductModelAsync(null, product));
-
-            return model;
-        }
-
-        public async Task<ProductModel> PrepareProductModelAsync(ProductModel model, Product product, bool excludeProperties = false)
-        {
-            if (product != null)
-            {
-                if (model == null)
-                {
-                    model = new ProductModel()
-                    {
-                        Id = product.Id,
-                        Name = product.Name,
-                        Description = product.Description,
-                        ImagePath = product.ImagePath,
-                        CategoryId = product.CategoryId,
-                        BuyingPrice = product.BuyingPrice,
-                        SellingPrice = product.SellingPrice,
-                        Quantity = product.Quantity,
-                    };
-                }
-                else
-                {
-                    model.Id = product.Id;
-                    model.Name = product.Name;
-                    model.Description = product.Description;
-                    model.ImagePath = product.ImagePath;
-                    model.CategoryId = product.CategoryId;
-                    model.BuyingPrice = product.BuyingPrice;
-                    model.SellingPrice = product.SellingPrice;
-                    model.Quantity = product.Quantity;
-                }
-
-                var productCategory = await _categoryService.GetCategoryByIdAsync(product.CategoryId);
-                model.CategoryName = productCategory?.Name;
-            }
-
-            if (!excludeProperties)
-            {
-                var allCategories = await _categoryService.GetAllCategory();
-                model.AvailableCategoryOptions = allCategories.Select(category => new SelectListItem
-                {
-                    Value = category.Id.ToString(),
-                    Text = category.Name
-                }).ToList();
-            }
-
-            return model;
-        }
-
-        #endregion
+        _categoryService = categoryService;
+        _productService = productService;
     }
+
+    #endregion
+
+    #region Methods
+
+    public async Task<ProductListModel> PrepareProductListModelAsync(int categoryId)
+    {
+        var model = new ProductListModel();
+
+        var allCategories = await _categoryService.GetAllCategory();
+        model.AvailableCategories = allCategories.Select(category => new SelectListItem
+        {
+            Value = category.Id.ToString(),
+            Text = category.Name,
+            Selected = category.Id == categoryId
+        }).ToList();
+
+        var products = await _productService.GetAllProductsByCategoryId(categoryId);
+        foreach (var product in products)
+            model.Products.Add(await PrepareProductModelAsync(null, product, true));
+
+        return model;
+    }
+
+    public async Task<ProductModel> PrepareProductModelAsync(ProductModel model, Product product, bool excludeProperties = false)
+    {
+        if (product != null)
+        {
+            if (model == null)
+            {
+                model = new ProductModel()
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    ImagePath = product.ImagePath,
+                    CategoryId = product.CategoryId,
+                    BuyingPrice = product.BuyingPrice,
+                    SellingPrice = product.SellingPrice,
+                    Quantity = product.Quantity,
+                };
+            }
+
+            var productCategory = await _categoryService.GetCategoryByIdAsync(product.CategoryId);
+            model.CategoryName = productCategory?.Name;
+        }
+
+        if (!excludeProperties)
+        {
+            var allCategories = await _categoryService.GetAllCategory();
+            model.AvailableCategoryOptions = allCategories.Select(category => new SelectListItem
+            {
+                Value = category.Id.ToString(),
+                Text = category.Name
+            }).ToList();
+        }
+
+        return model;
+    }
+
+    #endregion
 }

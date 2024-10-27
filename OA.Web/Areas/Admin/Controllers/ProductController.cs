@@ -33,10 +33,9 @@ namespace OA_WEB.Areas.Admin.Controllers
 
         #region Methods
 
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(int categoryId = 0)
         {
-            var products = await _productService.GetAllProductAsync();
-            var model = await _productModelFactory.PrepareProductListModelAsync(products);
+            var model = await _productModelFactory.PrepareProductListModelAsync(categoryId);
 
             return View(model);
         }

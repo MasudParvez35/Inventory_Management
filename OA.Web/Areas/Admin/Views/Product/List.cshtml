@@ -1,4 +1,4 @@
-﻿@model IList<ProductModel>
+﻿@model ProductListModel
 @{
     ViewData["Title"] = "Admin Product List";
 }
@@ -7,42 +7,64 @@
     <a class="btn btn-primary" asp-area="Admin" asp-action="Create" asp-controller="Product">Create Product</a>
 </p>
 
-<div class="container mt-5">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Description</th>
-                <th>Buying Price</th>
-                <th>Selling Price</th>
-                <th>Quantity</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+<form method="get" asp-controller="Product" asp-action="List">
+    <div class="form-group">
+        <div class="col-md-4">
+            <label for="categorySelect">Filter by Category</label>
+            <select id="categorySelect" name="categoryId" class="form-control" onchange="this.form.submit()">
+                <option value="0">All</option>
+                @foreach (var item in Model.AvailableCategories)
+                {
+                    if (item.Selected)
+                    {
+                        <option value="@item.Value" selected>@item.Text</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Value")>@item.Text</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>
-                        <a asp-area="Admin" asp-action="Details" asp-controller="Product" asp-route-id="@item.Id">
-                            <img src="@item.ImagePath" alt="@item.Name" style="height: 50px; width: 50px; object-fit: cover;" />
-                        </a>
-                    </td>
-                    <td>@item.Name</td>
-                    <td>@item.CategoryName</td>
-                    <td>@item.Description</td>
-                    <td>@item.BuyingPrice</td>
-                    <td>@item.SellingPrice</td>
-                    <td>@item.Quantity</td>
-                    <td>
-                        <a class="btn btn-warning btn-sm" asp-area="Admin" asp-action="Edit" asp-controller="Product" asp-route-id="@item.Id">Edit</a>
-                        <a class="btn btn-info btn-sm" asp-area="Admin" asp-action="Details" asp-controller="Product" asp-route-id="@item.Id">Details</a>
-                        <a class="btn btn-danger btn-sm" asp-area="Admin" asp-action="Delete" asp-controller="Product" asp-route-id="@item.Id">Delete</a>
-                    </td>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Buying Price</th>
+                    <th>Selling Price</th>
+                    <th>Quantity</th>
+                    <th>Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Products)
+                {
+                    <tr>
+                        <td>
+                            <a asp-area="Admin" asp-action="Details" asp-controller="Product" asp-route-id="@item.Id">
+                                <img src="@item.ImagePath" alt="@item.Name" style="height: 50px; width: 50px; object-fit: cover;" />
+                            </a>
+                        </td>
+                        <td>@item.Name</td>
+                        <td>@item.CategoryName</td>
+                        <td>@item.Description</td>
+                        <td>@item.BuyingPrice</td>
+                        <td>@item.SellingPrice</td>
+                        <td>@item.Quantity</td>
+                        <td>
+                            <a class="btn btn-warning btn-sm" asp-area="Admin" asp-action="Edit" asp-controller="Product" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-info btn-sm" asp-area="Admin" asp-action="Details" asp-controller="Product" asp-route-id="@item.Id">Details</a>
+                            <a class="btn btn-danger btn-sm" asp-area="Admin" asp-action="Delete" asp-controller="Product" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</form>
