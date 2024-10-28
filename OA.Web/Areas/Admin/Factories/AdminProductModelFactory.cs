@@ -27,10 +27,11 @@ public class AdminProductModelFactory : IAdminProductModelFactory
 
     #region Methods
 
-    public async Task<ProductListModel> PrepareProductListModelAsync(int categoryId)
+    public async Task<ProductListModel> PrepareProductListModelAsync(int categoryId, int page = 1, int pageSize = 5)
     {
         var model = new ProductListModel();
-        if (categoryId > 0) 
+
+        if (categoryId > 0)
             model.CategoryName = (await _categoryService.GetCategoryByIdAsync(categoryId)).Name;
 
         var allCategories = await _categoryService.GetAllCategory();
@@ -41,12 +42,27 @@ public class AdminProductModelFactory : IAdminProductModelFactory
             Selected = category.Id == categoryId
         }).ToList();
 
+        // Retrieve products by category, apply pagination
         var products = await _productService.GetAllProductsByCategoryId(categoryId);
-        foreach (var product in products)
+        int totalProducts = products.Count();
+        int totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);
+
+        var paginatedProducts = products
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        // Prepare the product models
+        foreach (var product in paginatedProducts)
             model.Products.Add(await PrepareProductModelAsync(null, product, true));
+
+        // Set pagination data
+        model.CurrentPage = page;
+        model.TotalPages = totalPages;
 
         return model;
     }
+
 
     public async Task<ProductModel> PrepareProductModelAsync(ProductModel model, Product product, bool excludeProperties = false)
     {

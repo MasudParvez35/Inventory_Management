@@ -15,4 +15,10 @@ public class ProductListModel : BaseEntity
     public IList<SelectListItem> AvailableCategories { get; set; }
 
     public IList<ProductModel> Products { get; set; }
+
+    public int CurrentPage { get; set; }
+
+    public int TotalPages { get; set; }
+
+    public int SelectedCategoryId { get; set; }
 }
