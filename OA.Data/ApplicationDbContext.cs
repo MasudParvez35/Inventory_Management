@@ -10,9 +10,11 @@ namespace OA.Data
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<City> Cities { get; set; }
-        public DbSet<Order> Orders { get; set; } 
+        public DbSet<Warehouse> Warehouses { get; set; }
         public DbSet<State> States { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Area> Areas { get; set; }
+        public DbSet<Order> Orders { get; set; } 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; } 
@@ -38,6 +40,13 @@ namespace OA.Data
                 .HasMany(c => c.Products)
                 .WithOne(p => p.Category)
                 .HasForeignKey(p => p.CategoryId);
+
+            // Configuring the relationship between Warehouse and Product
+           /* modelBuilder.Entity<Warehouse>()
+                .HasMany(w => w.Products)
+                .WithOne(p => p.Warehouse)
+                .HasForeignKey(p => p.WarehouseId)
+                .OnDelete(DeleteBehavior.Restrict);*/
 
             // Configuring the relationship between ShoppingCartItem and User
             modelBuilder.Entity<ShoppingCartItem>()

@@ -1,4 +1,5 @@
-﻿using OA.Core.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using OA.Core.Domain;
 using OA.Data;
 
 namespace OA.Services
@@ -19,7 +20,8 @@ namespace OA.Services
 
         public async Task<IEnumerable<City>> GetCitiesByStateIdAsync(int stateId)
         {
-            return await _cityRepository.FindByAsync(x => x.StateId == stateId);
+            //return await _cityRepository.FindByAsync(x => x.StateId == stateId);
+            return await _cityRepository.Table.Where(x => x.StateId == stateId).ToListAsync();
         }
 
         public async Task<City> GetCityByIdAsync(int cityId)

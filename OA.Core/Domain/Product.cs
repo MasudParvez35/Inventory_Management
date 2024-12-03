@@ -12,8 +12,12 @@ namespace OA.Core.Domain
         public int Quantity { get; set; }
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
+        public int WarehouseId { get; set; }
+        [ForeignKey("WarehouseId")]
+
 
         public Category Category { get; set; }
+        public Warehouse Warehouse { get; set; }
         public ICollection<ShoppingCartItem> ShoppingCartItems { get; set; }
     }
 }
