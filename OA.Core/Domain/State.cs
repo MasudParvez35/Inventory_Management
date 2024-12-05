@@ -1,7 +1,6 @@
-﻿namespace OA.Core.Domain
+﻿namespace OA.Core.Domain;
+
+public class State : BaseEntity
 {
-    public class State : BaseEntity
-    {
-        public string Name { get; set; }
-    }
+    public string Name { get; set; }
 }

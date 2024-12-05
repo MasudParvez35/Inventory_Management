@@ -45,7 +45,7 @@ namespace OA_WEB.Factories
                         UserName = user.Name,
                         Email = user.Email,
                         Password = user.Password,
-                        Mobile = user.Mobile,
+                        Mobile = user.Phone,
                         StateId = user.StateId,
                         CityId = user.CityId
                     };

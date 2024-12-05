@@ -95,8 +95,8 @@ public class OrderController : Controller
                 UserId = model.UserId,
                 PaymentTypeId = model.PaymentTypeId,
                 OrderStatusId = model.OrderStatusId,
-                MobileNumber = model.MobileNumber,
-                TransactionId = model.TransactionId,
+                Phone = model.MobileNumber,
+                TransactionNumber = model.TransactionId,
                 StateId = model.StateId,
                 CityId = model.CityId,
                 TotalAmount = model.TotalAmount

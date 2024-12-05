@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
     $("#city").attr('disabled', true);
+    $("#area").attr('disabled', true);
     LoadStates();
 });
 
@@ -9,7 +10,12 @@ $("#state").change(function () {
         LoadCities();
     }
 });
-
+$("#city").change(function () {
+    var cityId = $(this).val();
+    if (cityId > 0) {
+        LoadAreas();
+    }
+});
 function LoadStates() {
     $('#state').empty();
 
@@ -21,6 +27,7 @@ function LoadStates() {
                 $('#state').attr('disabled', false);
                 $('#state').append('<option>--select state--</option>');
                 $('#city').append('<option>--select city--</option>');
+                $('#area').append('<option>--select area--</option>');
                 $.each(response, function (i, data) {
                     $('#state').append('<option value="' + data.id + '">' + data.name + '</option>');
                 });
@@ -51,6 +58,34 @@ function LoadCities() {
             else {
                 $('#city').attr('disabled', true);
                 $('#city').append('<option>--cities not available--</option>');
+            }
+        },
+        error: function (error) {
+            // Handle error if needed
+        }
+    });
+}
+
+function LoadAreas() {
+    $('#area').empty();
+
+    var cityId = $('#city').val();
+    console.log("Selected City ID:", cityId);
+    $.ajax({
+        url: "/Account/GetAreas",
+        type: "GET",
+        data: { cityId: cityId },
+        success: function (response) {
+            if (response && response.length > 0) {
+                $('#area').attr('disabled', false);
+                $('#area').append('<option>--select area--</option>');
+                $.each(response, function (i, data) {
+                    $('#area').append('<option value="' + data.id + '">' + data.name + '</option>');
+                });
+            }
+            else {
+                $('#area').attr('disabled', true);
+                $('#area').append('<option>--areas not available--</option>');
             }
         },
         error: function (error) {

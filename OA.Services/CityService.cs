@@ -2,31 +2,41 @@
 using OA.Core.Domain;
 using OA.Data;
 
-namespace OA.Services
+namespace OA.Services;
+
+public class CityService : ICityService
 {
-    public class CityService : ICityService
+    protected readonly IRepository<City> _cityRepository;
+    protected readonly IRepository<Area> _areaRepository;
+
+    public CityService(IRepository<City> cityRepository, 
+        IRepository<Area> areaRepository)
     {
-        protected readonly IRepository<City> _cityRepository;
+        _cityRepository = cityRepository;
+        _areaRepository = areaRepository;
+    }
 
-        public CityService(IRepository<City> cityRepository)
-        {
-            _cityRepository = cityRepository;
-        }
+    public async Task<IEnumerable<City>> GetCitiesByStateIdAsync(int stateId)
+    {
+        return await _cityRepository.Table
+            .Where(x => x.StateId == stateId)
+            .ToListAsync();
+    }
 
-        public async Task<IEnumerable<City>> GetAllCitiesAsync()
-        {
-            return await _cityRepository.GetAllAsync();
-        }
+    public async Task<City> GetCityByIdAsync(int cityId)
+    {
+        return await _cityRepository.GetByIdAsync(cityId);
+    }
 
-        public async Task<IEnumerable<City>> GetCitiesByStateIdAsync(int stateId)
-        {
-            //return await _cityRepository.FindByAsync(x => x.StateId == stateId);
-            return await _cityRepository.Table.Where(x => x.StateId == stateId).ToListAsync();
-        }
+    public async Task<Area> GetAreaByIdAsync(int areaId)
+    {
+        return await _areaRepository.GetByIdAsync(areaId);
+    }
 
-        public async Task<City> GetCityByIdAsync(int cityId)
-        {
-            return await _cityRepository.GetByIdAsync(cityId);
-        }
+    public async Task<IEnumerable<Area>> GetAreasByCityIdAsync(int cityId)
+    {
+        return await _areaRepository.Table
+            .Where(x => x.CityId == cityId)
+            .ToListAsync();
     }
 }

@@ -50,7 +50,7 @@ namespace OA_WEB.Areas.Admin.Factories
                         Id = user.Id,
                         UserName = user.Name,
                         Email = user.Email,
-                        Mobile = user.Mobile,
+                        Mobile = user.Phone,
                         StateId = user.StateId,
                         CityId = user.CityId
                     };

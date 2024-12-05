@@ -7,186 +7,193 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
-namespace OA_WEB.Controllers
+namespace OA_WEB.Controllers;
+
+public class AccountController : Controller
 {
-    public class AccountController : Controller
+    #region Fields
+
+    protected readonly ICityService _cityService;
+    protected readonly IStateService _stateService;
+    protected readonly IAccountService _accountService;
+    protected readonly IAccountModelFactory _accountModelFactory;
+
+    #endregion
+
+    #region Ctor
+
+    public AccountController(IAccountService accountService,
+        IAccountModelFactory accountModelFactory,
+        ICityService cityService,
+        IStateService stateService)
     {
-        #region Fields
+        _cityService = cityService;
+        _stateService = stateService;
+        _accountService = accountService;
+        _accountModelFactory = accountModelFactory;
+    }
 
-        protected readonly ICityService _cityService;
-        protected readonly IStateService _stateService;
-        protected readonly IAccountService _accountService;
-        protected readonly IAccountModelFactory _accountModelFactory;
+    #endregion
 
-        #endregion
+    #region Methods
 
-        #region Ctor
+    #region User
 
-        public AccountController(IAccountService accountService,
-            IAccountModelFactory accountModelFactory,
-            ICityService cityService,
-            IStateService stateService)
+    [AcceptVerbs("Get", "Post")]
+    public async Task<IActionResult> UserNameIsExist(string userName)
+    {
+        var user = await _accountService.GetUserByUsernameAsync(userName);
+        if (user != null)
         {
-            _cityService = cityService;
-            _stateService = stateService;
-            _accountService = accountService;
-            _accountModelFactory = accountModelFactory;
+            return Json($"Username {userName} is already taken.");
         }
+        return Json(true);
+    }
 
-        #endregion
-
-        #region Methods
-
-        #region User
-
-        [AcceptVerbs("Get", "Post")]
-        public async Task<IActionResult> UserNameIsExist(string userName)
+    public async Task<IActionResult> GetCurrentUser()
+    {
+        if (User.Identity.IsAuthenticated)
         {
-            var user = await _accountService.GetUserByUsernameAsync(userName);
-            if (user != null)
-            {
-                return Json($"Username {userName} is already taken.");
-            }
-            return Json(true);
-        }
+            var username = User.FindFirst(ClaimTypes.Name)?.Value;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        public async Task<IActionResult> GetCurrentUser()
-        {
-            if (User.Identity.IsAuthenticated)
+            if (int.TryParse(userIdClaim, out int userId))
             {
-                var username = User.FindFirst(ClaimTypes.Name)?.Value;
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                if (int.TryParse(userIdClaim, out int userId))
-                {
-                    return Json(new { Username = username, UserId = userId });
-                }
-                else
-                {
-                    return BadRequest("User ID is invalid.");
-                }
+                return Json(new { Username = username, UserId = userId });
             }
             else
             {
-                return Unauthorized("User is not logged in.");
+                return BadRequest("User ID is invalid.");
             }
         }
-
-        public async Task<IActionResult> Login()
+        else
         {
-            var model = await _accountModelFactory.PrepareLoginModelModelAsync(new LoginModel(), null);
-
-            return View(model);
+            return Unauthorized("User is not logged in.");
         }
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginModel model)
+    public async Task<IActionResult> Login()
+    {
+        var model = await _accountModelFactory.PrepareLoginModelModelAsync(new LoginModel(), null);
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginModel model)
+    {
+        if (ModelState.IsValid)
         {
-            if (ModelState.IsValid)
+            var user = await _accountService.GetUserByUsernameAsync(model.UserName);
+            if (user != null)
             {
-                var user = await _accountService.GetUserByUsernameAsync(model.UserName);
-                if (user != null)
+                bool isValid = (user.Name == model.UserName && (user.Password) == model.Password);
+                if (isValid)
                 {
-                    bool isValid = (user.Name == model.UserName && (user.Password) == model.Password);
-                    if (isValid)
+                    var identity = new ClaimsIdentity(new[]
                     {
-                        var identity = new ClaimsIdentity(new[]
-                        {
-                            new Claim(ClaimTypes.Name, model.UserName),
-                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) // Add user ID here
-                        }, CookieAuthenticationDefaults.AuthenticationScheme);
+                        new Claim(ClaimTypes.Name, model.UserName),
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) // Add user ID here
+                    }, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                        var principal = new ClaimsPrincipal(identity);
-                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                        HttpContext.Session.SetString("Username", model.UserName);
+                    var principal = new ClaimsPrincipal(identity);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                    HttpContext.Session.SetString("Username", model.UserName);
 
-                        return RedirectToAction("List", "Product");
-                    }
-                    else
-                    {
-                        TempData["errorPassword"] = "Invalid password!";
-                        return View(model);
-                    }
+                    return RedirectToAction("List", "Product");
                 }
                 else
                 {
-                    TempData["errorUsername"] = "Username not found!";
+                    TempData["errorPassword"] = "Invalid password!";
                     return View(model);
                 }
             }
             else
             {
+                TempData["errorUsername"] = "Username not found!";
                 return View(model);
             }
         }
-
-        public async Task<IActionResult> SignUp()
+        else
         {
-            var model = await _accountModelFactory.PrepareSignUpModelAsync(new SignUpModel(), null);
-
             return View(model);
         }
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> SignUp(SignUpModel model)
+    public async Task<IActionResult> SignUp()
+    {
+        var model = await _accountModelFactory.PrepareSignUpModelAsync(new SignUpModel(), null);
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SignUp(SignUpModel model)
+    {
+        if (ModelState.IsValid)
         {
-            if (ModelState.IsValid)
+            var data = new User()
             {
-                var data = new User()
-                {
-                    Name = model.UserName,
-                    Email = model.Email,
-                    Password = model.Password,
-                    Mobile = model.Mobile,
-                    StateId = model.StateId,
-                    CityId = model.CityId,
-                };
+                Name = model.UserName,
+                Email = model.Email,
+                Password = model.Password,
+                Phone = model.Mobile,
+                StateId = model.StateId,
+                CityId = model.CityId,
+                AreaId = model.AreaId
+            };
 
-                await _accountService.InsertUserAsync(data);
-                TempData["successMessage"] = "You are eligible to login, Please fill own credential's then login!";
-                
-                return RedirectToAction("Login");
-            }
-            else
-            {
-                model = await _accountModelFactory.PrepareSignUpModelAsync(model, null);
-                
-                return View(model);
-            }
-        }
-
-        public async Task<IActionResult> LogOut()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            var storedCookies = Request.Cookies.Keys;
-            foreach (var cookies in storedCookies)
-            {
-                Response.Cookies.Delete(cookies);
-            }
-
+            await _accountService.InsertUserAsync(data);
+            TempData["successMessage"] = "You are eligible to login, Please fill own credential's then login!";
+            
             return RedirectToAction("Login");
         }
-
-        #endregion
-
-        #region State-city
-
-        public async Task<IActionResult> GetStates()
+        else
         {
-            var states = await _stateService.GetAllStatesAsync();
-
-            return new JsonResult(states);
+            model = await _accountModelFactory.PrepareSignUpModelAsync(model, null);
+            
+            return View(model);
         }
-
-        public async Task<IActionResult> GetCities(int stateId)
-        {
-            var cities = await _cityService.GetCitiesByStateIdAsync(stateId);
-
-            return new JsonResult(cities);
-        }
-
-        #endregion
-
-        #endregion
     }
+
+    public async Task<IActionResult> LogOut()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        var storedCookies = Request.Cookies.Keys;
+        foreach (var cookies in storedCookies)
+        {
+            Response.Cookies.Delete(cookies);
+        }
+
+        return RedirectToAction("Login");
+    }
+
+    #endregion
+
+    #region State-city
+
+    public async Task<IActionResult> GetStates()
+    {
+        var states = await _stateService.GetAllStatesAsync();
+
+        return new JsonResult(states);
+    }
+
+    public async Task<IActionResult> GetCities(int stateId)
+    {
+        var cities = await _cityService.GetCitiesByStateIdAsync(stateId);
+
+        return new JsonResult(cities);
+    }
+
+    public async Task<IActionResult> GetAreas(int cityId)
+    {
+        var areas = await _cityService.GetAreasByCityIdAsync(cityId);
+
+        return new JsonResult(areas);
+    }
+
+    #endregion
+
+    #endregion
 }

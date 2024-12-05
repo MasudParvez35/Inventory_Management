@@ -1,11 +1,14 @@
 ﻿using OA.Core.Domain;
 
-namespace OA.Services
+namespace OA.Services;
+
+public interface ICityService
 {
-    public interface ICityService
-    {
-        Task<City> GetCityByIdAsync(int cityId);
-        Task<IEnumerable<City>> GetCitiesByStateIdAsync(int stateId);   
-        Task<IEnumerable<City>> GetAllCitiesAsync();
-    }
+    Task<City> GetCityByIdAsync(int cityId);
+    
+    Task<IEnumerable<City>> GetCitiesByStateIdAsync(int stateId);   
+    
+    Task<Area> GetAreaByIdAsync(int areaId);
+
+    Task<IEnumerable<Area>> GetAreasByCityIdAsync(int cityId);
 }

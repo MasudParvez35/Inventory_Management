@@ -1,10 +1,9 @@
 ﻿using OA.Core.Domain;
 
-namespace OA.Services
+namespace OA.Services;
+
+public interface IStateService
 {
-    public interface IStateService
-    {
-        Task<State> GetStateByIdAsync(int id);
-        Task<IEnumerable<State>> GetAllStatesAsync();
-    }
+    Task<State> GetStateByIdAsync(int id);
+    Task<IEnumerable<State>> GetAllStatesAsync();
 }

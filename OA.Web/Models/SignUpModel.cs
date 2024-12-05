@@ -31,5 +31,8 @@ namespace OA_WEB.Models
 
         [Required(ErrorMessage = "Please select city")]
         public int CityId { get; set; }
+
+        [Required(ErrorMessage = "Please select area")]
+        public int AreaId { get; set; }
     }
 }

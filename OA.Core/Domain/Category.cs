@@ -1,9 +1,6 @@
-﻿namespace OA.Core.Domain
-{
-    public class Category : BaseEntity
-    {
-        public string Name { get; set; }
+﻿namespace OA.Core.Domain;
 
-        public ICollection<Product> Products { get; set; }
-    }
+public class Category : BaseEntity
+{
+    public string Name { get; set; }
 }

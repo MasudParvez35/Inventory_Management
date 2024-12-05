@@ -40,7 +40,7 @@ namespace OA.Data.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Areas");
+                    b.ToTable("Area");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.Category", b =>
@@ -57,7 +57,7 @@ namespace OA.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.City", b =>
@@ -79,7 +79,7 @@ namespace OA.Data.Migrations
 
                     b.HasIndex("StateId");
 
-                    b.ToTable("Cities");
+                    b.ToTable("City");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.Order", b =>
@@ -93,15 +93,15 @@ namespace OA.Data.Migrations
                     b.Property<int>("CityId")
                         .HasColumnType("int");
 
-                    b.Property<string>("MobileNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("OrderStatusId")
                         .HasColumnType("int");
 
                     b.Property<int>("PaymentTypeId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StateId")
                         .HasColumnType("int");
@@ -109,11 +109,14 @@ namespace OA.Data.Migrations
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("TransactionId")
+                    b.Property<string>("TransactionNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WarehouseId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -124,7 +127,9 @@ namespace OA.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.Product", b =>
@@ -167,7 +172,7 @@ namespace OA.Data.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.ShoppingCartItem", b =>
@@ -196,7 +201,7 @@ namespace OA.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ShoppingCartItems");
+                    b.ToTable("ShoppingCartItem");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.State", b =>
@@ -213,7 +218,7 @@ namespace OA.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("States");
+                    b.ToTable("State");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.User", b =>
@@ -224,14 +229,13 @@ namespace OA.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AreaId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CityId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Mobile")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -243,16 +247,22 @@ namespace OA.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("StateId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AreaId");
+
                     b.HasIndex("CityId");
 
                     b.HasIndex("StateId");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.Warehouse", b =>
@@ -268,7 +278,7 @@ namespace OA.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Warehouses");
+                    b.ToTable("Warehouse");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.Area", b =>
@@ -298,19 +308,25 @@ namespace OA.Data.Migrations
                     b.HasOne("OA.Core.Domain.City", "City")
                         .WithMany()
                         .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("OA.Core.Domain.State", "State")
                         .WithMany()
                         .HasForeignKey("StateId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("OA.Core.Domain.User", "User")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OA.Core.Domain.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("City");
@@ -318,12 +334,14 @@ namespace OA.Data.Migrations
                     b.Navigation("State");
 
                     b.Navigation("User");
+
+                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.Product", b =>
                 {
                     b.HasOne("OA.Core.Domain.Category", "Category")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -342,13 +360,13 @@ namespace OA.Data.Migrations
             modelBuilder.Entity("OA.Core.Domain.ShoppingCartItem", b =>
                 {
                     b.HasOne("OA.Core.Domain.Product", "Product")
-                        .WithMany("ShoppingCartItems")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("OA.Core.Domain.User", "User")
-                        .WithMany("ShoppingCartItems")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -360,38 +378,29 @@ namespace OA.Data.Migrations
 
             modelBuilder.Entity("OA.Core.Domain.User", b =>
                 {
+                    b.HasOne("OA.Core.Domain.Area", "Area")
+                        .WithMany()
+                        .HasForeignKey("AreaId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("OA.Core.Domain.City", "City")
                         .WithMany()
                         .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("OA.Core.Domain.State", "State")
                         .WithMany()
                         .HasForeignKey("StateId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Area");
 
                     b.Navigation("City");
 
                     b.Navigation("State");
-                });
-
-            modelBuilder.Entity("OA.Core.Domain.Category", b =>
-                {
-                    b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("OA.Core.Domain.Product", b =>
-                {
-                    b.Navigation("ShoppingCartItems");
-                });
-
-            modelBuilder.Entity("OA.Core.Domain.User", b =>
-                {
-                    b.Navigation("Orders");
-
-                    b.Navigation("ShoppingCartItems");
                 });
 #pragma warning restore 612, 618
         }
