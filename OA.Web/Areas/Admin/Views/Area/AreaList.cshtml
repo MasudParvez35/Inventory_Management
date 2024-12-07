@@ -1,0 +1,34 @@
+﻿@model AreaListModel
+@{
+    ViewData["Title"] = "Admin Area List";
+}
+
+<p>
+    <a class="btn btn-primary" asp-area="Admin" asp-action="AreaCreate" asp-controller="Area">Create Area</a>
+</p>
+
+<form method="get" asp-action="AreaList" asp-controller="Area">
+    <div class="container mt-5">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Display order</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Areas)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.DisplayOrder</td>
+                        <td>
+                            <a asp-area="Admin" asp-action="AreaEdit" asp-controller="Area" asp-route-id="@item.Id">Edit</a>
+                            <a asp-area="Admin" asp-action="AreaDelete" asp-controller="Area" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</form>

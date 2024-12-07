@@ -11,8 +11,8 @@ using OA.Data;
 namespace OA.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241205033444_init")]
-    partial class init
+    [Migration("20241206034019_Display-order-add")]
+    partial class Displayorderadd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,9 @@ namespace OA.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DisplayOrder")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -70,6 +73,9 @@ namespace OA.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -215,6 +221,9 @@ namespace OA.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -282,6 +291,29 @@ namespace OA.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Warehouse");
+                });
+
+            modelBuilder.Entity("OA.Core.Domain.WarehouseAreaMapping", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AreaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AreaId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("WarehouseAreaMapping");
                 });
 
             modelBuilder.Entity("OA.Core.Domain.Area", b =>
@@ -404,6 +436,25 @@ namespace OA.Data.Migrations
                     b.Navigation("City");
 
                     b.Navigation("State");
+                });
+
+            modelBuilder.Entity("OA.Core.Domain.WarehouseAreaMapping", b =>
+                {
+                    b.HasOne("OA.Core.Domain.Area", "Area")
+                        .WithMany()
+                        .HasForeignKey("AreaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OA.Core.Domain.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Area");
+
+                    b.Navigation("Warehouse");
                 });
 #pragma warning restore 612, 618
         }

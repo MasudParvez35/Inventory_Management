@@ -156,6 +156,32 @@ namespace OA.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WarehouseAreaMapping",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    WarehouseId = table.Column<int>(type: "int", nullable: false),
+                    AreaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WarehouseAreaMapping", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WarehouseAreaMapping_Area_AreaId",
+                        column: x => x.AreaId,
+                        principalTable: "Area",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WarehouseAreaMapping_Warehouse_WarehouseId",
+                        column: x => x.WarehouseId,
+                        principalTable: "Warehouse",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Order",
                 columns: table => new
                 {
@@ -289,6 +315,16 @@ namespace OA.Data.Migrations
                 name: "IX_User_StateId",
                 table: "User",
                 column: "StateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseAreaMapping_AreaId",
+                table: "WarehouseAreaMapping",
+                column: "AreaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseAreaMapping_WarehouseId",
+                table: "WarehouseAreaMapping",
+                column: "WarehouseId");
         }
 
         /// <inheritdoc />
@@ -299,6 +335,9 @@ namespace OA.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ShoppingCartItem");
+
+            migrationBuilder.DropTable(
+                name: "WarehouseAreaMapping");
 
             migrationBuilder.DropTable(
                 name: "Product");

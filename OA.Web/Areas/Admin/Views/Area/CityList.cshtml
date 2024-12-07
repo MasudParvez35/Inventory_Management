@@ -1,0 +1,36 @@
+﻿@model CityListModel
+@{
+    ViewData["Title"] = "Admin City List";
+}
+
+<p>
+    <a class="btn btn-primary" asp-area="Admin" asp-action="CityCreate" asp-controller="Area">Create City</a>
+</p>
+
+<form method="get" asp-action="CityList" asp-controller="Area">
+    <div class="container mt-5">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Number of areas</th>
+                    <th>Display order</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Cities)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.NumberOfAreas</td>
+                        <td>@item.DisplayOrder</td>
+                        <td>
+                            <a asp-area="Admin" asp-action="CityEdit" asp-controller="Area" asp-route-id="@item.Id">Edit</a>
+                            <a asp-area="Admin" asp-action="CityDelete" asp-controller="Area" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</form>

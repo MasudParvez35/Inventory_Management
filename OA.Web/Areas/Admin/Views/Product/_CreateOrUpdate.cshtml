@@ -1,7 +1,7 @@
 ﻿@model ProductModel
 
 <div class="form-group">
-    <label asp-for="ImagePath">Image</label>
+    <label class="fw-bold text-warning" asp-for="ImagePath">@Model.Name</label>
     @if (!string.IsNullOrEmpty(Model.ImagePath))
     {
         <img src="@Model.ImagePath" alt="Current Image" style="max-width: 200px; margin-bottom: 10px;" />
@@ -28,10 +28,18 @@
 
 <div class="form-group">
     <label asp-for="CategoryName"></label>
-    <select asp-for="CategoryId" class="form-control" asp-items="Model.AvailableCategoryOptions">
+    <select asp-for="CategoryId" class="form-control" asp-items="Model.AvailableCategories">
         <option value="">Select Category</option>
     </select>
     <span class="text-danger" asp-validation-for="CategoryId"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="WarehouseName"></label>
+    <select asp-for="WarehouseId" class="form-control" asp-items="Model.AvailableWarehouses">
+        <option value="">Select Warehouse</option>
+    </select>
+    <span class="text-danger" asp-validation-for="WarehouseId"></span>
 </div>
 
 <div class="form-group">

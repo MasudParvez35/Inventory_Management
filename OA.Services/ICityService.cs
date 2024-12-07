@@ -6,9 +6,9 @@ public interface ICityService
 {
     Task<City> GetCityByIdAsync(int cityId);
     
-    Task<IEnumerable<City>> GetCitiesByStateIdAsync(int stateId);   
-    
-    Task<Area> GetAreaByIdAsync(int areaId);
-
-    Task<IEnumerable<Area>> GetAreasByCityIdAsync(int cityId);
+    Task<IEnumerable<City>> GetCitiesByStateIdAsync(int stateId);
+    Task InsertCityAsync(City city);
+    Task UpdateCityAsync(City city);
+    Task DeleteCityAsync(City city);
+    Task<IEnumerable<City>> GetAllCitiesAsync();
 }

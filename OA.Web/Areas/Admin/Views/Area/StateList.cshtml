@@ -1,0 +1,36 @@
+﻿@model StateListModel
+@{
+    ViewData["Title"] = "Admin State List";
+}
+
+<p>
+    <a class="btn btn-primary" asp-area="Admin" asp-action="StateCreate" asp-controller="Area">Create State</a>
+</p>
+
+<form method="get" asp-action="StateList" asp-controller="Area">
+    <div class="container mt-5">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Number of city</th>
+                    <th>Display order</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.States)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.NumberOfCity</td>
+                        <td>@item.DisplayOrder</td>
+                        <td>
+                            <a asp-area="Admin" asp-action="StateEdit" asp-controller="Area" asp-route-id="@item.Id">Edit</a>
+                            <a asp-area="Admin" asp-action="StateDelete" asp-controller="Area" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</form>

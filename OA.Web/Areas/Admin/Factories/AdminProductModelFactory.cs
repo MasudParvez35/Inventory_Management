@@ -11,16 +11,19 @@ public class AdminProductModelFactory : IAdminProductModelFactory
 
     private readonly ICategoryService _categoryService;
     private readonly IProductService _productService;
+    private readonly IWarehouseService _warehouseService;
 
     #endregion
 
     #region Ctor
 
-    public AdminProductModelFactory(ICategoryService categoryService, 
-        IProductService productService)
+    public AdminProductModelFactory(ICategoryService categoryService,
+        IProductService productService,
+        IWarehouseService warehouseService)
     {
         _categoryService = categoryService;
         _productService = productService;
+        _warehouseService = warehouseService;
     }
 
     #endregion
@@ -77,6 +80,7 @@ public class AdminProductModelFactory : IAdminProductModelFactory
                     Description = product.Description,
                     ImagePath = product.ImagePath,
                     CategoryId = product.CategoryId,
+                    WarehouseId = product.WarehouseId,
                     BuyingPrice = product.BuyingPrice,
                     SellingPrice = product.SellingPrice,
                     Quantity = product.Quantity,
@@ -84,16 +88,26 @@ public class AdminProductModelFactory : IAdminProductModelFactory
             }
 
             var productCategory = await _categoryService.GetCategoryByIdAsync(product.CategoryId);
-            model.CategoryName = productCategory?.Name;
+            model.CategoryName = productCategory.Name;
+
+            var productWarehouse = await _warehouseService.GetWarehouseByIdAsync(product.WarehouseId);
+            model.WarehouseName = productWarehouse.Name;
         }
 
         if (!excludeProperties)
         {
             var allCategories = await _categoryService.GetAllCategory();
-            model.AvailableCategoryOptions = allCategories.Select(category => new SelectListItem
+            model.AvailableCategories = allCategories.Select(category => new SelectListItem
             {
                 Value = category.Id.ToString(),
                 Text = category.Name
+            }).ToList();
+
+            var allWarehouses = await _warehouseService.GetWarehousesAsync();
+            model.AvailableWarehouses = allWarehouses.Select(warehouse => new SelectListItem
+            {
+                Value = warehouse.Id.ToString(),
+                Text = warehouse.Name
             }).ToList();
         }
 

@@ -8,6 +8,8 @@ public class Area : BaseEntity
 
     public int CityId { get; set; }
 
+    public int DisplayOrder { get; set; }
+
     #region Nagivate Properties
 
     [ForeignKey("CityId")]

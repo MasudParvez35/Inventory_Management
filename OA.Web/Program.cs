@@ -38,6 +38,11 @@ builder.Services.AddScoped<IAdminOrderModelFactory, AdminOrderModelFactory>();
 
 builder.Services.AddScoped<IStateService, StateService>();
 builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<IAreaService, AreaService>();
+
+builder.Services.AddScoped<IWarehouseService, WarehouseService>();
+
+builder.Services.AddScoped<IAreaModelFactory, AreaModelFactory>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(option =>

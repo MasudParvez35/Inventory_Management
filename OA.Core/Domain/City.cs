@@ -8,6 +8,8 @@ public class City : BaseEntity
 
     public int StateId { get; set; }
 
+    public int DisplayOrder { get; set; }
+
     #region Nagivate Properties
 
     [ForeignKey("StateId")]

@@ -13,6 +13,7 @@ public class AccountController : Controller
 {
     #region Fields
 
+    protected readonly IAreaService _areaService;
     protected readonly ICityService _cityService;
     protected readonly IStateService _stateService;
     protected readonly IAccountService _accountService;
@@ -25,12 +26,14 @@ public class AccountController : Controller
     public AccountController(IAccountService accountService,
         IAccountModelFactory accountModelFactory,
         ICityService cityService,
-        IStateService stateService)
+        IStateService stateService,
+        IAreaService areaService)
     {
         _cityService = cityService;
         _stateService = stateService;
         _accountService = accountService;
         _accountModelFactory = accountModelFactory;
+        _areaService = areaService;
     }
 
     #endregion
@@ -188,7 +191,7 @@ public class AccountController : Controller
 
     public async Task<IActionResult> GetAreas(int cityId)
     {
-        var areas = await _cityService.GetAreasByCityIdAsync(cityId);
+        var areas = await _areaService.GetAreasByCityIdAsync(cityId);
 
         return new JsonResult(areas);
     }

@@ -1,13 +1,17 @@
 ﻿using OA.Core.Domain;
-namespace OA.Services
+namespace OA.Services;
+
+public interface ICategoryService
 {
-    public interface ICategoryService
-    {
-        Task InsertCategoryAsync(Category category);
-        Task UpdateCategoryAsync(Category category);
-        Task DeleteCategoryAsync(Category category);
-        Task<Category> GetCategoryByIdAsync(int categoryId);
-        Task<IEnumerable<Category>> GetAllCategory();
-        Task<int> GetTotalCategoriesAsync();
-    }
+    Task InsertCategoryAsync(Category category);
+
+    Task UpdateCategoryAsync(Category category);
+
+    Task DeleteCategoryAsync(Category category);
+
+    Task<Category> GetCategoryByIdAsync(int categoryId);
+
+    Task<IEnumerable<Category>> GetAllCategory();
+
+    Task<int> GetTotalCategoriesAsync();
 }

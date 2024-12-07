@@ -7,13 +7,27 @@ namespace OA.Services;
 public class CityService : ICityService
 {
     protected readonly IRepository<City> _cityRepository;
-    protected readonly IRepository<Area> _areaRepository;
 
-    public CityService(IRepository<City> cityRepository, 
-        IRepository<Area> areaRepository)
+    public CityService(IRepository<City> cityRepository)
     {
         _cityRepository = cityRepository;
-        _areaRepository = areaRepository;
+    }
+
+    #region Methods
+
+    public async Task InsertCityAsync(City city)
+    {
+        await _cityRepository.InsertAsync(city);
+    }
+
+    public async Task UpdateCityAsync(City city)
+    {
+        await _cityRepository.UpdateAsync(city);
+    }
+
+    public async Task DeleteCityAsync(City city)
+    {
+        await _cityRepository.DeleteAsync(city);
     }
 
     public async Task<IEnumerable<City>> GetCitiesByStateIdAsync(int stateId)
@@ -28,15 +42,10 @@ public class CityService : ICityService
         return await _cityRepository.GetByIdAsync(cityId);
     }
 
-    public async Task<Area> GetAreaByIdAsync(int areaId)
+    public async Task<IEnumerable<City>> GetAllCitiesAsync()
     {
-        return await _areaRepository.GetByIdAsync(areaId);
+        return await _cityRepository.GetAllAsync();
     }
 
-    public async Task<IEnumerable<Area>> GetAreasByCityIdAsync(int cityId)
-    {
-        return await _areaRepository.Table
-            .Where(x => x.CityId == cityId)
-            .ToListAsync();
-    }
+    #endregion
 }

@@ -1,0 +1,19 @@
+﻿@model StateModel
+@{
+}
+
+<h2>Create State</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6 offset-3">
+            <form method="post" asp-controller="Area" asp-action="StateCreate">
+                <partial name="_CreateOrUpdate.State"></partial>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Create" />
+                    <a class="btn btn-primary" asp-action="StateList" asp-controller="Area">Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

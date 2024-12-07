@@ -27,6 +27,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<ShoppingCartItem> ShoppingCartItem { get; set; } 
 
+    public DbSet<WarehouseAreaMapping> WarehouseAreaMapping { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
