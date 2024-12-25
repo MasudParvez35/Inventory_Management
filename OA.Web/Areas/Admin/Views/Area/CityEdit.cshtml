@@ -1,0 +1,21 @@
+﻿@model CityModel
+@{
+    ViewData["Title"] = "City Edit";
+}
+<h2>Edit City</h2>
+
+<input asp-for="Id" type="hidden" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-6 offset-3">
+            <form method="post" asp-controller="Area" asp-action="CityEdit" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Update" />
+                    <a class="btn btn-primary" asp-action="CityList" asp-controller="Area">Back to city list</a>
+                </div>
+                <partial name="_CreateOrUpdate.City"></partial>
+            </form>
+        </div>
+    </div>
+</div>

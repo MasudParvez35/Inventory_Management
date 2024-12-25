@@ -1,0 +1,21 @@
+﻿@model StateModel
+@{
+    ViewData["Title"] = "State Edit";
+}
+<h2>Edit State</h2>
+
+<input asp-for="Id" type="hidden" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-6 offset-3">
+            <form method="post" asp-controller="Area" asp-action="StateEdit" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Update" />
+                    <a class="btn btn-primary" asp-action="StateList" asp-controller="Area">Back to state list</a>
+                </div>
+                <partial name="_CreateOrUpdate.State"></partial>
+            </form>
+        </div>
+    </div>
+</div>

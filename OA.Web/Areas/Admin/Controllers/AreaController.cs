@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 using OA.Core.Domain;
 using OA.Services;
 using OA_WEB.Areas.Admin.Factories;
@@ -73,19 +72,71 @@ public class AreaController : Controller
         return View(model);
     }
 
-    #endregion
-
-    #region City
-
-    public async Task<IActionResult> CityList()
+    public async Task<IActionResult> StateEdit(int id)
     {
-        var model = await _areaModelFactory.PrepareCityListModelAsync();
+        var state = await _stateService.GetStateByIdAsync(id);
+        if (state == null)
+            return RedirectToAction("StateList");
+
+        var model = await _areaModelFactory.PrepareStateModelAsync(null, state);
 
         return View(model);
     }
 
-    public async Task<IActionResult> CityCreate()
+    [HttpPost]
+    public async Task<IActionResult> StateEdit(StateModel model)
     {
+        if (ModelState.IsValid)
+        {
+            var state = await _stateService.GetStateByIdAsync(model.Id);
+            if (state == null)
+                return RedirectToAction("StateList");
+
+            state.Name = model.Name;
+            state.DisplayOrder = model.DisplayOrder;
+
+            await _stateService.UpdateStateAsync(state);
+
+            return RedirectToAction("StateList");
+        }
+
+        model = await _areaModelFactory.PrepareStateModelAsync(model, null);
+
+        return View(model);
+    }
+
+    public async Task<IActionResult> StateDelete(int id)
+    {
+        var state = await _stateService.GetStateByIdAsync(id);
+        if (state == null)
+            return RedirectToAction("StateList");
+
+        await _stateService.DeleteStateAsync(state);
+
+        return RedirectToAction("StateList");
+    }
+
+    #endregion
+
+    #region City
+
+    public async Task<IActionResult> CityList(int id)
+    {
+        if (id == 0)
+            return RedirectToAction("StateList");
+
+        var state = await _stateService.GetStateByIdAsync(id);
+        var model = await _areaModelFactory.PrepareCityListModelAsync(state);
+
+        return View(model);
+    }
+
+    public async Task<IActionResult> CityCreate(int id)
+    {
+        var state = await _stateService.GetStateByIdAsync(id);
+        if (state == null)
+            return RedirectToAction("StateList");
+
         var model = await _areaModelFactory.PrepareCityModelAsync(new CityModel(), null);
 
         return View(model);
@@ -94,22 +145,71 @@ public class AreaController : Controller
     [HttpPost]
     public async Task<IActionResult> CityCreate(CityModel model)
     {
+        var state = await _stateService.GetStateByIdAsync(model.Id);
+        if (state == null)
+            return RedirectToAction("StateList");
+
         if (ModelState.IsValid)
         {
             var city = new City()
             {
+                StateId = state.Id,
                 Name = model.Name,
                 DisplayOrder = model.DisplayOrder
             };
 
             await _cityService.InsertCityAsync(city);
 
-            return RedirectToAction("CityList");
+            return RedirectToAction("StateEdit", new {id = state.Id});
         }
 
         model = await _areaModelFactory.PrepareCityModelAsync(model, null);
 
         return View(model);
+    }
+
+    public async Task<IActionResult> CityEdit(int id)
+    {
+        var city = await _cityService.GetCityByIdAsync(id);
+        if (city == null)
+            return RedirectToAction("CityList");
+
+        var model = await _areaModelFactory.PrepareCityModelAsync(null, city);
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CityEdit(StateModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var state = await _stateService.GetStateByIdAsync(model.Id);
+            if (state == null)
+                return RedirectToAction("StateList");
+
+            state.Name = model.Name;
+            state.DisplayOrder = model.DisplayOrder;
+
+            await _stateService.UpdateStateAsync(state);
+
+            return RedirectToAction("StateList");
+        }
+
+        model = await _areaModelFactory.PrepareStateModelAsync(model, null);
+
+        return View(model);
+    }
+
+    public async Task<IActionResult> CityDelete(int id)
+    {
+        var city = await _cityService.GetCityByIdAsync(id);
+        if (city == null)
+            return RedirectToAction("CityList");
+
+        await _cityService.DeleteCityAsync(city);
+
+        return RedirectToAction("CityList");
     }
 
     #endregion
@@ -133,10 +233,15 @@ public class AreaController : Controller
     [HttpPost]
     public async Task<IActionResult> AreaCreate(AreaModel model)
     {
+        var city = await _cityService.GetCityByIdAsync(model.Id);
+        if (city == null)
+            return RedirectToAction("AreaList");
+
         if (ModelState.IsValid)
         {
             var area = new Area()
             {
+                CityId = city.Id,
                 Name = model.Name,
                 DisplayOrder = model.DisplayOrder
             };

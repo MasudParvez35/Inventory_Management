@@ -1,8 +1,8 @@
-﻿@model CityListModel
+﻿@model StateModel
 @{
     ViewData["Title"] = "Admin City List";
 }
-
+<input asp-for="Id" type="hidden" />
 <p>
     <a class="btn btn-primary" asp-area="Admin" asp-action="CityCreate" asp-controller="Area">Create City</a>
 </p>

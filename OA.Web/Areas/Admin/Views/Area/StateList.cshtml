@@ -15,6 +15,7 @@
                     <th>Name</th>
                     <th>Number of city</th>
                     <th>Display order</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,8 +26,8 @@
                         <td>@item.NumberOfCity</td>
                         <td>@item.DisplayOrder</td>
                         <td>
-                            <a asp-area="Admin" asp-action="StateEdit" asp-controller="Area" asp-route-id="@item.Id">Edit</a>
-                            <a asp-area="Admin" asp-action="StateDelete" asp-controller="Area" asp-route-id="@item.Id">Delete</a>
+                            <a class="btn btn-warning btn-sm me-2" asp-area="Admin" asp-action="StateEdit" asp-controller="Area" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-danger btn-sm" asp-area="Admin" asp-action="StateDelete" asp-controller="Area" asp-route-id="@item.Id">Delete</a>
                         </td>
                     </tr>
                 }

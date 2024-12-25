@@ -29,10 +29,6 @@
                         {
                             <a class="nav-link text-dark" asp-controller="Order" asp-action="Myorder">Myorder</a>
                             <a class="nav-link text-dark" asp-controller="ShoppingCart" asp-action="WishList">
-                                Location @await Component.InvokeAsync("SelectLocation")
-                            </a>
-                            @* <a class="mx-2 btn btn-sm btn-danger font-weight-bold" asp-action="Myorder" asp-controller="Order">Myorder</a> *@
-                            <a class="nav-link text-dark" asp-controller="ShoppingCart" asp-action="WishList">
                                 Wishlist @await Component.InvokeAsync("WishlistItemCount")
                             </a>
                             <a class="nav-link text-dark" asp-controller="ShoppingCart" asp-action="CartList">

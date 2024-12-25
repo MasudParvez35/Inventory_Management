@@ -8,7 +8,7 @@ public interface IAreaModelFactory
     Task<AreaListModel> PrepareAreaListModelAsync();
     Task<AreaModel> PrepareAreaModelAsync(AreaModel model, Area area);
 
-    Task<CityListModel> PrepareCityListModelAsync();
+    Task<CityListModel> PrepareCityListModelAsync(State state);
     Task<CityModel> PrepareCityModelAsync(CityModel model, City city);
 
     Task<StateListModel> PrepareStateListModelAsync();

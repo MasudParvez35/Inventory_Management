@@ -1,0 +1,53 @@
+﻿@model StateModel
+@{
+}
+<input asp-for="Id" type="hidden" />
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h4>City List</h4>
+        <div class="mb-3">
+            <a asp-area="Admin" asp-action="CityCreate" asp-controller="Area" asp-route-id="@Model.Id" class="btn btn-success">
+                <i class="fas fa-plus"></i> Create City
+            </a>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>City Name</th>
+                    <th>Display Order</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Cities.Any())
+                {
+                    @foreach (var item in Model.Cities)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.DisplayOrder</td>
+                            <td>
+                                <a asp-area="Admin" asp-action="AreaCreate" asp-controller="Area" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-plus-circle"></i> Create Area
+                                </a>
+                                <a asp-area="Admin" asp-action="CityEdit" asp-controller="Area" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a asp-area="Admin" asp-action="CityDelete" asp-controller="Area" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-center">No cities found for this state.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

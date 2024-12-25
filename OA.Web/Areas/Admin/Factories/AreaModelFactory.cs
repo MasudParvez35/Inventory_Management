@@ -28,52 +28,30 @@ public class AreaModelFactory : IAreaModelFactory
     #endregion
 
     #region Methods
-    
+
+    #region State
+
     public async Task<StateModel> PrepareStateModelAsync(StateModel model, State state)
     {
-        if (state == null)
-            return model;
-
-        var numberOfCities = (await _cityService.GetCitiesByStateIdAsync(state.Id)).Count();
-
-        model = new StateModel
+        if (state != null)
         {
-            Name = state.Name,
-            NumberOfCity = numberOfCities,
-            DisplayOrder = state.DisplayOrder
-        };
+            if (model == null)
+            {
+                var numberOfCities = (await _cityService.GetCitiesByStateIdAsync(state.Id)).Count();
 
-        return model;
-    }
+                model = new StateModel
+                {
+                    Id = state.Id,
+                    Name = state.Name,
+                    NumberOfCity = numberOfCities,
+                    DisplayOrder = state.DisplayOrder
+                };
+            }
 
-    public async Task<CityModel> PrepareCityModelAsync(CityModel model, City city)
-    {
-        if (city == null)
-            return model;
-
-        var numberofAreas = (await _areaService.GetAreasByCityIdAsync(city.Id)).Count();
-
-        model = new CityModel
-        {
-            Name = city.Name,
-            NumberOfAreas = numberofAreas,
-            DisplayOrder = city.DisplayOrder
-        };
-
-        return model;
-    }
-
-    public async Task<AreaModel> PrepareAreaModelAsync(AreaModel model, Area area)
-    {
-        if (area == null)
-            return model;
-
-        model = new AreaModel
-        {
-            Name = area.Name,
-            DisplayOrder = area.DisplayOrder
-        };
-
+            var cityListModel = await PrepareCityListModelAsync(state);
+            model.Cities = cityListModel.Cities;
+        }
+        
         return model;
     }
 
@@ -88,13 +66,61 @@ public class AreaModelFactory : IAreaModelFactory
         return model;
     }
 
-    public async Task<CityListModel> PrepareCityListModelAsync()
+    #endregion
+
+    #region City
+
+    public async Task<CityModel> PrepareCityModelAsync(CityModel model, City city)
+    {
+        if (city != null)
+        {
+            if (model == null)
+            {
+                var numberofAreas = (await _areaService.GetAreasByCityIdAsync(city.Id)).Count();
+
+                model = new CityModel()
+                {
+                    Id = city.Id,
+                    Name = city.Name,
+                    NumberOfAreas = numberofAreas,
+                    DisplayOrder = city.DisplayOrder
+                };
+            }
+        }
+
+        return model;
+    }
+
+    public async Task<CityListModel> PrepareCityListModelAsync(State state)
     {
         var model = new CityListModel();
 
-        var cities = await _cityService.GetAllCitiesAsync();
+        var cities = await _cityService.GetCitiesByStateIdAsync(state.Id);
+        
         foreach (var city in cities)
             model.Cities.Add(await PrepareCityModelAsync(null, city));
+
+        return model;
+    }
+
+    #endregion
+
+    #region Area
+
+    public async Task<AreaModel> PrepareAreaModelAsync(AreaModel model, Area area)
+    {
+        if (area != null)
+        {
+            if (model == null)
+            {
+                model = new AreaModel()
+                {
+                    Id = area.Id,
+                    Name = area.Name,
+                    DisplayOrder = area.DisplayOrder
+                };
+            }
+        }
 
         return model;
     }
@@ -109,6 +135,8 @@ public class AreaModelFactory : IAreaModelFactory
 
         return model;
     }
+
+    #endregion
 
     #endregion
 }

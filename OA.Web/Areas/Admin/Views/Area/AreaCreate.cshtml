@@ -1,0 +1,21 @@
+﻿@model AreaModel
+@{
+}
+
+<h2>Create Area</h2>
+
+<input asp-for="Id" type="hidden" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-6 offset-3">
+            <form method="post" asp-controller="Area" asp-action="AreaCreate">
+                <partial name="_CreateOrUpdate.Area"></partial>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Create" />
+                    <a class="btn btn-primary" asp-action="StateEdit" asp-route-id="@Model.Id" asp-controller="Area">Back to area list</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
